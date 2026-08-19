@@ -1,0 +1,5 @@
+import type { IconName } from "@/app/Types/dashboard";
+
+const paths: Record<IconName, string> = { grid: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z", building: "M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M2 21h20M8 7h2m-2 4h2m-2 4h2m6-6h2m-2 4h2m-2 4h2", people: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75", receipt: "M5 3h14v18l-3-2-4 2-4-2-3 2zM8 8h8M8 12h8", chart: "M4 20V10M10 20V4M16 20v-7M22 20H2", bell: "M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4", search: "m21 21-4.35-4.35M19 11a8 8 0 1 1-16 0 8 8 0 0 1 16 0", plus: "M12 5v14M5 12h14", arrow: "m9 18 6-6-6-6", dots: "M5 12h.01M12 12h.01M19 12h.01" };
+
+export function Icon({ name, size = 20 }: { name: IconName; size?: number }) { return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[name]} /></svg>; }

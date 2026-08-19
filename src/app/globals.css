@@ -1,26 +1,38 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+:root { --background: #f7f8fc; --foreground: #18212f; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
+button, input { font: inherit; }
+button { cursor: pointer; }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Shared Rentwise theme for every Reactstrap primitive. */
+.card { --bs-card-border-color: #e7eaf1; --bs-card-bg: #fff; border-radius: 1rem; }
+.card-header { border-radius: 1rem 1rem 0 0 !important; }
+.btn { --bs-btn-font-weight: 650; --bs-btn-focus-box-shadow: 0 0 0 .22rem rgba(68, 55, 216, .18); display: inline-flex; align-items: center; justify-content: center; }
+.btn-primary { --bs-btn-bg: #4437d8; --bs-btn-border-color: #4437d8; --bs-btn-hover-bg: #372cb9; --bs-btn-hover-border-color: #372cb9; --bs-btn-active-bg: #2e249d; --bs-btn-active-border-color: #2e249d; }
+.btn-link { --bs-btn-color: #4437d8; --bs-btn-hover-color: #372cb9; }
+.form-control, .input-group-text { min-height: 44px; background-color: #fff; border-color: #e2e8f0; }
+.form-control:focus { border-color: #a7a0f5 !important; box-shadow: 0 0 0 .2rem rgba(68, 55, 216, .12) !important; }
+.table { --bs-table-bg: transparent; --bs-table-border-color: #edf0f5; }
+.table > :not(caption) > * > * { box-shadow: none; }
+.table tbody tr { transition: background-color .16s ease; }
+.table tbody tr:hover { background-color: #fafaff; }
+.badge { letter-spacing: .01em; }
+.progress { --bs-progress-bg: rgba(255,255,255,.15); border-radius: 999px; overflow: hidden; }
+.progress-bar { border-radius: 999px; }
+.list-group-item { --bs-list-group-border-color: #f0f2f6; }
+.alert-primary { --bs-alert-color: #3730a3; --bs-alert-bg: #eef2ff; --bs-alert-border-color: #d9ddff; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+.rentwise-sidebar { background: linear-gradient(180deg, #28205c 0%, #211a4d 100%); box-shadow: 16px 0 40px rgba(34, 27, 79, .08); }
+.rentwise-sidebar::-webkit-scrollbar { width: 5px; }
+.rentwise-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 999px; }
+.rentwise-mark { background: linear-gradient(135deg, #8e83ff, #5d4deb); box-shadow: 0 10px 24px rgba(110, 97, 245, .38); }
+.rentwise-nav .nav-link { color: #c9c5ec; position: relative; }
+.rentwise-nav .nav-link { display: flex !important; align-items: center; white-space: nowrap; }
+.rentwise-nav .nav-link svg { flex: 0 0 auto; }
+.rentwise-nav .nav-link:hover { color: #fff; background: rgba(255,255,255,.08); }
+.rentwise-nav .nav-link.is-active, .rentwise-nav .nav-link.active { color: #fff; background: linear-gradient(90deg, rgba(128,115,255,.48), rgba(128,115,255,.19)); box-shadow: inset 3px 0 #b7b0ff; }
+.rentwise-help { background: linear-gradient(135deg, #5c4bd8, #7465ee); box-shadow: 0 12px 28px rgba(14, 10, 46, .25); }
+.mobile-menu-button { display: none !important; }
+@media (max-width: 991.98px) { .mobile-menu-button { display: grid !important; } }
