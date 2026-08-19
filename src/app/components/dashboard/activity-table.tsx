@@ -31,7 +31,7 @@ export function ActivityTable({
 }) {
   return (
     <Card className="rounded-2xl border-slate-200 shadow-sm">
-      <CardHeader className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-white px-5 py-5 sm:px-6">
+      <CardHeader className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-white py-3 sm:px-6">
         <div>
           <h2 className="font-bold">Recent rent activity</h2>
           <p className="mt-1 text-xs text-slate-500">

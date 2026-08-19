@@ -45,9 +45,9 @@ export function StatsGrid() {
       {stats.map((stat) => (
         <Col key={stat.label} sm="6" xl="3">
           <Card className="relative h-full overflow-hidden rounded-2xl border-slate-200 shadow-sm">
-            <CardBody className="p-5">
+            <CardBody>
               <div className={`absolute inset-x-0 top-0 h-1 ${stat.accent}`} />
-              <div className="mb-5 flex items-center justify-between">
+              <div className=" flex items-center justify-between">
                 <p className="text-sm font-medium text-slate-500">
                   {stat.label}
                 </p>

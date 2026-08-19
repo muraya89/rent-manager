@@ -30,13 +30,11 @@ const tasks = [
 export function InsightsPanel() {
   return (
     <aside className="space-y-6">
-      <Card className="rounded-2xl border-0 bg-[#28205c] text-white shadow-lg shadow-indigo-100">
+      <Card className="rounded-2xl border-0 bg-[#28205c] shadow-lg shadow-indigo-100">
         <CardBody className="p-6">
           <div className="mb-6 flex items-start justify-between">
             <div>
-              <p className="text-sm font-medium text-indigo-200">
-                Collection progress
-              </p>
+              <p className="text-sm font-medium">Collection progress</p>
               <h2 className="mt-1 text-2xl font-bold">92% collected</h2>
             </div>
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/10">
@@ -48,21 +46,21 @@ export function InsightsPanel() {
             className="h-2.5 bg-white/15"
             barClassName="bg-[#a6f4d3]"
           />
-          <div className="mt-3 flex justify-between text-xs text-indigo-200">
+          <div className="mt-3 flex justify-between text-xs">
             <span>KES 486,000 received</span>
             <span>KES 526,000 goal</span>
           </div>
           <Button
             color="link"
-            className="mt-4 flex items-center gap-2 p-0 text-sm font-semibold text-white text-decoration-none"
+            className="mt-4 flex items-center gap-2 p-0 text-sm font-semibold text-decoration-none"
           >
             View collection report <Icon name="arrow" size={16} />
           </Button>
         </CardBody>
       </Card>
       <Card className="rounded-2xl border-slate-200 shadow-sm">
-        <CardBody className="p-5">
-          <div className="mb-5 flex items-center justify-between">
+        <CardBody className="p-6">
+          <div className="flex items-center justify-between">
             <div>
               <h2 className="font-bold">Tasks to review</h2>
               <p className="mt-1 text-xs text-slate-500">
@@ -73,7 +71,8 @@ export function InsightsPanel() {
               4 open
             </Badge>
           </div>
-          <ListGroup flush className="space-y-1">
+          <hr />
+          <ListGroup flush>
             {tasks.map((task) => (
               <ListGroupItem
                 key={task.title}
