@@ -49,9 +49,9 @@ export const tenants: TenantActivity[] = [
 ];
 
 export const navigation: { label: string; icon: IconName; href: string }[] = [
-  { label: "Overview", icon: "grid", href: "/" },
-  { label: "Properties", icon: "building", href: "/properties" },
-  { label: "Tenants", icon: "people", href: "/tenants" },
-  { label: "Payments", icon: "receipt", href: "/payments" },
-  { label: "Reports", icon: "chart", href: "/reports" },
+  { label: "Overview", icon: "grid", href: "/dashboard" },
+  { label: "Properties", icon: "building", href: "/dashboard/properties" },
+  { label: "Tenants", icon: "people", href: "/dashboard/tenants" },
+  { label: "Payments", icon: "receipt", href: "/dashboard/payments" },
+  { label: "Reports", icon: "chart", href: "/dashboard/reports" },
 ];

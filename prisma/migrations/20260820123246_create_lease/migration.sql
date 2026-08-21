@@ -1,0 +1,20 @@
+-- CreateTable
+CREATE TABLE `Lease` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `tenantId` INTEGER NOT NULL,
+    `unitId` INTEGER NOT NULL,
+    `startDate` DATETIME(3) NOT NULL,
+    `endDate` DATETIME(3) NULL,
+    `monthlyRent` DECIMAL(65, 30) NOT NULL,
+    `status` ENUM('ACTIVE', 'EXPIRED', 'TERMINATED') NOT NULL DEFAULT 'ACTIVE',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Lease` ADD CONSTRAINT `Lease_tenantId_fkey` FOREIGN KEY (`tenantId`) REFERENCES `Tenant`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Lease` ADD CONSTRAINT `Lease_unitId_fkey` FOREIGN KEY (`unitId`) REFERENCES `Unit`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

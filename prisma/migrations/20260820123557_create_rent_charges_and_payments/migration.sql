@@ -1,0 +1,33 @@
+-- CreateTable
+CREATE TABLE `RentCharge` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `leaseId` INTEGER NOT NULL,
+    `amount` DECIMAL(65, 30) NOT NULL,
+    `dueDate` DATETIME(3) NOT NULL,
+    `period` VARCHAR(191) NOT NULL,
+    `status` ENUM('UNPAID', 'PARTIALLY_PAID', 'PAID', 'OVERDUE') NOT NULL DEFAULT 'UNPAID',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Payment` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `rentChargeId` INTEGER NOT NULL,
+    `amount` DECIMAL(65, 30) NOT NULL,
+    `paidAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `method` ENUM('CASH', 'MPESA', 'BANK_TRANSFER', 'CARD', 'OTHER') NOT NULL,
+    `reference` VARCHAR(191) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `RentCharge` ADD CONSTRAINT `RentCharge_leaseId_fkey` FOREIGN KEY (`leaseId`) REFERENCES `Lease`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Payment` ADD CONSTRAINT `Payment_rentChargeId_fkey` FOREIGN KEY (`rentChargeId`) REFERENCES `RentCharge`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
