@@ -1,45 +1,10 @@
 import { Card, CardBody, Col, Row } from "reactstrap";
 import { Icon } from "../../dashboard-icon";
 import type { IconName } from "@/app/Types/dashboard";
+import type { DashboardStat } from "@/app/Types/dashboard";
 
-const stats: {
-  label: string;
-  value: string;
-  detail: string;
-  accent: string;
-  icon: IconName;
-}[] = [
-  {
-    label: "Total properties",
-    value: "12",
-    detail: "2 added this year",
-    accent: "bg-violet-500",
-    icon: "building",
-  },
-  {
-    label: "Occupancy rate",
-    value: "92.4%",
-    detail: "+3.2% from last month",
-    accent: "bg-emerald-500",
-    icon: "people",
-  },
-  {
-    label: "Expected this month",
-    value: "KES 486k",
-    detail: "of KES 526k collected",
-    accent: "bg-sky-500",
-    icon: "receipt",
-  },
-  {
-    label: "Outstanding rent",
-    value: "KES 40k",
-    detail: "4 tenants need a reminder",
-    accent: "bg-amber-500",
-    icon: "chart",
-  },
-];
 
-export function StatsGrid() {
+export function StatsGrid({ stats }: { stats: DashboardStat[] }) {
   return (
     <Row className="mb-8 g-4">
       {stats.map((stat) => (

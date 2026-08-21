@@ -1,74 +1,156 @@
-"use client";
+import { prisma } from "@/lib/prisma";
+import DashboardContent from "./dashboard-content";
+import type { TenantActivity } from "@/app/Types/dashboard";
+import {formatMoney as money} from "@/lib/helpers/helper";
 
-import { useMemo, useState } from "react";
-import { tenants } from "@/app/data/dashboard";
-import { Alert, Button, Container } from "reactstrap";
-import { ActivityTable } from "./activity-table";
-import { DashboardHeader } from "./header";
-import { InsightsPanel } from "./reports/components/insights";
-import { Sidebar } from "./sidebar";
-import { StatsGrid } from "./reports/components/stats";
-
-export default function DashboardPage() {
-  const [query, setQuery] = useState("");
-  const [notice, setNotice] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const filteredTenants = useMemo(
-    () =>
-      tenants.filter((tenant) =>
-        `${tenant.name} ${tenant.unit} ${tenant.property}`
-          .toLowerCase()
-          .includes(query.toLowerCase()),
-      ),
-    [query],
+export default async function DashboardPage() {
+  const currentDate = new Date();
+  const monthStart = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1,
+  );
+  const nextMonthStart = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    1,
   );
 
+  const [
+    tenants,
+    propertyCount,
+    unitCount,
+    occupiedUnitCount,
+    expectedRent,
+    outstandingRent,
+    collectedRent,
+  ] = await Promise.all([
+    prisma.tenant.findMany({
+      select: {
+        name: true,
+        id: true,
+        leases: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          select: {
+            status: true,
+            monthlyRent: true,
+            unit: {
+              select: {
+                unitNumber: true,
+                property: { select: { name: true } },
+              },
+            },
+            rentCharges: {
+              orderBy: { dueDate: "desc" },
+              take: 1,
+              select: { amount: true, status: true },
+            },
+          },
+        },
+      },
+    }),
+    prisma.property.count(),
+    prisma.unit.count(),
+    // count of units that are currently occupied (i.e., have an active lease)
+    prisma.lease.count({ where: { status: "ACTIVE" } }),
+    // expected rent for the current month
+    prisma.rentCharge.aggregate({
+      _sum: { amount: true },
+      where: { dueDate: { gte: monthStart, lt: nextMonthStart } },
+    }),
+    // current-month rent charges, with payments used to calculate outstanding rent
+    prisma.rentCharge.findMany({
+      where: {
+        dueDate: { gte: monthStart, lt: nextMonthStart },
+      },
+      include: {
+        payments: {
+          select: {
+            amount: true,
+          },
+        },
+      },
+    }),
+    // collected rent for the current month
+    prisma.payment.aggregate({
+      _sum: { amount: true },
+      where: { paidAt: { gte: monthStart, lt: nextMonthStart } },
+    }),
+  ]);
+
+  const tenantRows: TenantActivity[] = tenants.map((tenant) => {
+    const lease = tenant.leases[0];
+    const charge = lease?.rentCharges[0];
+    const nameParts = tenant.name.trim().split(/\s+/);
+
+    return {
+      name: tenant.name,
+      unit: lease?.unit.unitNumber ?? "No unit assigned",
+      property: lease?.unit.property.name ?? "No property assigned",
+      amount: charge?.amount.toString() ?? lease?.monthlyRent.toString() ?? "0",
+      status: charge?.status ?? lease?.status ?? "No lease",
+      initials: nameParts
+        .map((part) => part[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase(),
+      color: "bg-sky-100 text-sky-700",
+    };
+  });
+
+  const occupancyRate =
+    unitCount === 0 ? 0 : (occupiedUnitCount / unitCount) * 100;
+  const expectedRentAmount = Number(expectedRent._sum.amount ?? 0);
+  const collectedRentAmount = Number(collectedRent._sum.amount ?? 0);
+  const outstandingRentAmount = outstandingRent.reduce((total, charge) => {
+    const paidAmount = charge.payments.reduce(
+      (sum, payment) => sum + Number(payment.amount),
+      0,
+    );
+
+    return total + Math.max(0, Number(charge.amount) - paidAmount);
+  }, 0);
+
+  const stats = [
+    {
+      label: "Total properties",
+      value: propertyCount.toString(),
+      detail: `${unitCount} total units`,
+      accent: "bg-violet-500",
+      icon: "building" as const,
+    },
+    {
+      label: "Occupancy rate",
+      value: `${occupancyRate.toFixed(1)}%`,
+      detail: `${occupiedUnitCount} of ${unitCount} units occupied`,
+      accent: "bg-emerald-500",
+      icon: "people" as const,
+    },
+    {
+      label: "Expected this month",
+      value: money(expectedRentAmount),
+      detail: `${money(collectedRentAmount)} collected`,
+      accent: "bg-sky-500",
+      icon: "receipt" as const,
+    },
+    {
+      label: "Outstanding rent",
+      value: money(outstandingRentAmount),
+      detail: "Across unpaid and overdue charges",
+      accent: "bg-amber-500",
+      icon: "chart" as const,
+    },
+  ];
+
   return (
-    <Container
-      fluid
-      className="mx-auto flex min-h-screen w-full max-w-none px-0"
-    >
-      <section className="min-w-0 flex-1 px-4 py-4 sm:px-8 lg:px-10 lg:py-7">
-        <DashboardHeader
-          query={query}
-          onQueryChange={setQuery}
-          onAddTenant={() => setNotice(true)}
-          onOpenMenu={() => setMobileMenuOpen(true)}
-        />
-        {notice && (
-          <Alert
-            color="primary"
-            className="mb-5 flex items-center justify-between rounded-xl border-indigo-100 px-4 py-3 text-sm"
-          >
-            <span>
-              The tenant form will be connected when your database is ready.
-            </span>
-            <Button
-              onClick={() => setNotice(false)}
-              color="link"
-              className="p-0 font-semibold text-decoration-none"
-            >
-              Dismiss
-            </Button>
-          </Alert>
-        )}
-        <div className="mb-8">
-          <p className="mb-1 text-sm font-medium text-slate-500">
-            Tuesday, 19 August 2026
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Good morning, James <span aria-hidden="true">👋</span>
-          </h1>
-          <p className="mt-2 text-sm text-slate-500">
-            Here&apos;s what&apos;s happening with your properties today.
-          </p>
-        </div>
-        <StatsGrid />
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_330px]">
-          <ActivityTable tenants={filteredTenants} query={query} />
-          <InsightsPanel />
-        </div>
-      </section>
-    </Container>
+    <DashboardContent
+      tenants={tenantRows}
+      stats={stats}
+      collection={{
+        collected: collectedRentAmount,
+        expected: expectedRentAmount,
+      }}
+    />
   );
 }

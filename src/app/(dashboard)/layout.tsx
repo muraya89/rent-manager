@@ -1,12 +1,6 @@
 "use client";
 import { Sidebar } from "@/app/(dashboard)/dashboard/sidebar";
-import { useMemo, useState } from "react";
-import { DashboardHeader } from "./dashboard/header";
-import { InsightsPanel } from "./dashboard/reports/components/insights";
-import { Alert, Button } from "reactstrap";
-import { StatsGrid } from "./dashboard/reports/components/stats";
-import { ActivityTable } from "./dashboard/activity-table";
-import { tenants } from "../data/dashboard";
+import { useState } from "react";
 
 export default function DashboardLayout({
   children,
@@ -14,19 +8,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [notice, setNotice] = useState(false);
-  const filteredTenants = useMemo(
-    () =>
-      tenants.filter((tenant) =>
-        `${tenant.name} ${tenant.unit} ${tenant.property}`
-          .toLowerCase()
-          .includes(query.toLowerCase()),
-      ),
-    [query],
-  );
   return (
-    <main className="min-h-screen bg-[#f7f8fc] text-[#18212f]">
+    <main className="min-h-screen bg-[#f7f8fc] ">
       <div className="flex min-h-screen w-full">
         <Sidebar
           isMobileOpen={mobileMenuOpen}

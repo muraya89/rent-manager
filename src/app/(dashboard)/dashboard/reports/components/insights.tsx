@@ -8,6 +8,8 @@ import {
   Progress,
 } from "reactstrap";
 import { Icon } from "../../dashboard-icon";
+import type { CollectionProgress } from "@/app/Types/dashboard";
+import { formatMoney as money } from "@/lib/helpers/helper";
 
 const tasks = [
   {
@@ -27,7 +29,16 @@ const tasks = [
   },
 ];
 
-export function InsightsPanel() {
+export function InsightsPanel({
+  collection,
+}: {
+  collection: CollectionProgress;
+}) {
+  const progress =
+    collection.expected === 0
+      ? 0
+      : Math.min(100, (collection.collected / collection.expected) * 100);
+
   return (
     <aside className="space-y-6">
       <Card className="rounded-2xl border-0 bg-[#28205c] shadow-lg shadow-indigo-100">
@@ -35,20 +46,20 @@ export function InsightsPanel() {
           <div className="mb-6 flex items-start justify-between">
             <div>
               <p className="text-sm font-medium">Collection progress</p>
-              <h2 className="mt-1 text-2xl font-bold">92% collected</h2>
+              <h2 className="mt-1 text-2xl font-bold">{progress.toFixed(1)}%</h2>
             </div>
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/10">
               <Icon name="chart" />
             </div>
           </div>
           <Progress
-            value={92}
-            className="h-2.5 bg-white/15"
-            barClassName="bg-[#a6f4d3]"
+            value={progress}
+            className="h-2.5"
+            color="primary"
           />
           <div className="mt-3 flex justify-between text-xs">
-            <span>KES 486,000 received</span>
-            <span>KES 526,000 goal</span>
+            <span>{money(collection.collected)} received</span>
+            <span>{money(collection.expected)} goal</span>
           </div>
           <Button
             color="link"
@@ -59,6 +70,7 @@ export function InsightsPanel() {
           </Button>
         </CardBody>
       </Card>
+
       <Card className="rounded-2xl border-slate-200 shadow-sm">
         <CardBody className="p-6">
           <div className="flex items-center justify-between">

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button, Card, CardBody, Col, Container, Row, Table } from "reactstrap";
+import { Button, Card, CardBody,  Container } from "reactstrap";
 
-export default function SectionPage({}: {
+export default function ReportsSectionPage({}: {
 }) {
   return (
     <main className="min-h-screen bg-[#f7f8fc] py-8 text-[#18212f]">

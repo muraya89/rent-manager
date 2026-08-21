@@ -1,77 +1,52 @@
 "use client";
 
-import Link from "next/link";
-import { Button, Card, CardBody, Col, Container, Row, Table } from "reactstrap";
+import { Button, Card, CardBody, Col, Row, Table } from "reactstrap";
+import SectionPage from "@/app/shared-components/section-page";
+import { Tenant } from "@/app/Types/index";
 
-export default function SectionPage({
+export default function TenantsSectionPage({
   title,
   description,
   tenants,
 }: {
-  tenants: any[];
+  tenants: Tenant[];
   title: string;
   description: string;
 }) {
   return (
-    <main className="min-h-screen bg-[#f7f8fc] py-8 text-[#18212f]">
-      <Container className="max-w-5xl px-5 sm:px-8 lg:px-12">
-        <Button
-          tag={Link}
-          href="/dashboard"
-          color="link"
-          className="inline-flex items-center gap-2 p-0 text-sm font-semibold text-[#4437d8] text-decoration-none"
-        >
-          ← Back to overview
-        </Button>
-
-        <Card className="mt-8 overflow-hidden rounded-2xl border-slate-200 shadow-sm">
-          <CardBody className="p-0">
-            <div className="bg-gradient-to-br from-[#29205f] via-[#4437d8] to-[#6f62f0] px-7 py-9 text-white sm:px-10 sm:py-12">
-              <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-[.14em] text-indigo-100">
-                Rentwise workspace
-              </span>
-              <h1 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
-                {title}
-              </h1>
-              <p className="mt-3 max-w-xl text-sm leading-6 text-indigo-100 sm:text-base">
-                {description}
-              </p>
-            </div>
-            <div className="p-7 sm:p-10">
-              {tenants.length > 0 ? (
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tenants.map((tenant) => (
-                      <tr key={tenant.id}>
-                        <td>{tenant.name}</td>
-                        <td>{tenant.email}</td>
-                        <td>{tenant.phone}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              ) : (
-                <Row className="g-4">
-                  <Col md="8">
-                    <EmptyState title={title} />
-                  </Col>
-                  <Col md="4">
-                    <QuickAction title={title} />
-                  </Col>
-                </Row>
-              )}
-            </div>
-          </CardBody>
-        </Card>
-      </Container>
-    </main>
+    <SectionPage title={title} description={description}>
+      <div className="p-7 sm:p-10">
+        {tenants.length > 0 ? (
+          <Table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tenants.map((tenant) => (
+                <tr key={tenant.id}>
+                  <td>{tenant.name}</td>
+                  <td>{tenant.email}</td>
+                  <td>{tenant.phone}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        ) : (
+          <Row className="g-4">
+            <Col md="8">
+              <EmptyState title={title} />
+            </Col>
+            <Col md="4">
+              <QuickAction title={title} />
+            </Col>
+          </Row>
+        )}
+      </div>
+    </SectionPage>
   );
 }
 

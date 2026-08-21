@@ -9,3 +9,16 @@ export type TenantActivity = {
   initials: string;
   color: string;
 };
+
+export type DashboardStat = {
+  label: string;
+  value: string;
+  detail: string;
+  accent: string;
+  icon: "building" | "people" | "receipt" | "chart";
+};
+
+export type CollectionProgress = {
+  collected: number;
+  expected: number;
+};
