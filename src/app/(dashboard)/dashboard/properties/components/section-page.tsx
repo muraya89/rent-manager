@@ -3,6 +3,7 @@
 import { Button, Card, CardBody, Col, Row, Table } from "reactstrap";
 import SectionPage from "@/app/shared-components/section-page";
 import { Property } from "@/app/Types/index";
+import { Fragment, useState } from "react";
 
 export default function PropertiesSectionPage({
   title,
@@ -13,6 +14,13 @@ export default function PropertiesSectionPage({
   title: string;
   description: string;
 }) {
+  const [isViewingUnits, setIsViewingUnits] = useState<number | null>(
+    properties[0]?.id ?? null,
+  );
+  const handleViewUnits = (propertyId: number) => {
+    // Implement the logic to navigate to the units page for the selected property
+    setIsViewingUnits(propertyId);
+  };
   return (
     <SectionPage title={title} description={description}>
       <div className="p-7 sm:p-10">
@@ -23,15 +31,81 @@ export default function PropertiesSectionPage({
                 <th>Name</th>
                 <th>Address</th>
                 <th>Units</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {properties.map((property) => (
-                <tr key={property.id}>
-                  <td>{property.name}</td>
-                  <td>{property.address}</td>
-                  <td>{property.units.length}</td>
-                </tr>
+                <Fragment key={property.id}>
+                  <tr>
+                    <td>{property.name}</td>
+                    <td>{property.address}</td>
+                    <td>{property.units.length}</td>
+                    <td>
+                      {isViewingUnits !== property.id && (
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => handleViewUnits(property.id)}
+                        >
+                          View units
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                  {isViewingUnits === property.id && (
+                    <tr>
+                      <td colSpan={4}>
+                        <Card>
+                          <div className="p-4">
+                            <h4 className="text-base flex justify-between">
+                              Units for{" "}
+                              {
+                                properties.find((p) => p.id === property.id)
+                                  ?.name
+                              }
+                              <button
+                                className="btn btn-outline-primary btn-sm"
+                                onClick={() =>
+                                  setIsViewingUnits((propertyId) =>
+                                    propertyId === property.id
+                                      ? null
+                                      : propertyId,
+                                  )
+                                }
+                              >
+                                x
+                              </button>
+                            </h4>
+                            <Table>
+                              <thead>
+                                <tr>
+                                  <th>Unit Number</th>
+                                  <th>Monthly Rent</th>
+                                  <th>Tenant</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {properties
+                                  .find((p) => p.id === property.id)
+                                  ?.units.map((unit) => (
+                                    <tr key={unit.id}>
+                                      <td>{unit.unitNumber}</td>
+                                      <td>${unit.monthlyRent.toFixed(2)}</td>
+                                      <td>
+                                        {unit.leases.length > 0
+                                          ? unit.leases[0].tenant.name
+                                          : "-------"}
+                                      </td>
+                                    </tr>
+                                  ))}
+                              </tbody>
+                            </Table>
+                          </div>
+                        </Card>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
               ))}
             </tbody>
           </Table>

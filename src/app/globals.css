@@ -27,6 +27,7 @@ button { cursor: pointer; }
 .text-primary { color: var(--primary) !important; }
 .bg-primary { background-color: var(--primary) !important; }
 .text-secondary { color: var(--primary-hover) !important; }
+/* .text-base { font-size: 2rem; line-height: 1.5rem; color: var(--foreground) } */
 
 .rentwise-sidebar { background: white; box-shadow: 16px 0 40px rgba(34, 27, 79, .08); }
 .rentwise-sidebar::-webkit-scrollbar { width: 5px; }

@@ -3,4 +3,14 @@ export interface Property {
   name: string;
   address: string;
   monthlyRent: number;
+  units: Array<{
+    id: number;
+    unitNumber: string;
+    monthlyRent: number;
+    leases: Array<{
+      tenant: {
+        name: string;
+      };
+    }>;
+  }>;
 }
