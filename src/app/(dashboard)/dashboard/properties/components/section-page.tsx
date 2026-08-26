@@ -4,6 +4,8 @@ import { Button, Card, CardBody, Col, Row, Table } from "reactstrap";
 import SectionPage from "@/app/shared-components/section-page";
 import { Property } from "@/app/Types/index";
 import { Fragment, useState } from "react";
+import { formatMoney as money } from "@/lib/helpers/helper";
+
 
 export default function PropertiesSectionPage({
   title,
@@ -42,12 +44,30 @@ export default function PropertiesSectionPage({
                     <td>{property.address}</td>
                     <td>{property.units.length}</td>
                     <td>
+                      {/* view units button */}
                       {isViewingUnits !== property.id && (
                         <button
-                          className="btn btn-outline-primary btn-sm"
+                          type="button"
+                          aria-label={`View units for ${property.name}`}
+                          title="View units"
+                          className="group grid h-9 w-9 place-items-center rounded-xl border border-indigo-100 bg-white text-indigo-600 shadow-sm transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-50 hover:shadow-md"
                           onClick={() => handleViewUnits(property.id)}
                         >
-                          View units
+                          <svg
+                            aria-hidden="true"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="transition-transform group-hover:scale-110"
+                          >
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                            <circle cx="12" cy="12" r="2.5" />
+                          </svg>
                         </button>
                       )}
                     </td>
@@ -63,18 +83,56 @@ export default function PropertiesSectionPage({
                                 properties.find((p) => p.id === property.id)
                                   ?.name
                               }
-                              <button
-                                className="btn btn-outline-primary btn-sm"
-                                onClick={() =>
-                                  setIsViewingUnits((propertyId) =>
-                                    propertyId === property.id
-                                      ? null
-                                      : propertyId,
-                                  )
-                                }
-                              >
-                                x
-                              </button>
+                              <div className="flex gap-4">
+                                {/* add units button */}
+                                <Button
+                                  color="primary"
+                                  className="grid h-8 place-items-center rounded-full border-0 bg-slate-100 text-slate-500 transition-colors hover:bg-rose-100 hover:text-rose-600"
+                                >
+                                  <svg
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M12 5V19M5 12H19"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      stroke-linecap="round"
+                                    />
+                                  </svg>
+                                  Add Unit
+                                </Button>
+                                {/* close viewing units button */}
+                                <button
+                                  type="button"
+                                  aria-label="Close units"
+                                  title="Close units"
+                                  className="grid h-8 w-8 place-items-center rounded-full border-0 bg-slate-100 text-slate-500 transition-colors hover:bg-rose-100 hover:text-rose-600"
+                                  onClick={() =>
+                                    setIsViewingUnits((propertyId) =>
+                                      propertyId === property.id
+                                        ? null
+                                        : propertyId,
+                                    )
+                                  }
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.5"
+                                    strokeLinecap="round"
+                                  >
+                                    <path d="M6 6l12 12M18 6L6 18" />
+                                  </svg>
+                                </button>
+                              </div>
                             </h4>
                             <Table>
                               <thead>
@@ -90,7 +148,7 @@ export default function PropertiesSectionPage({
                                   ?.units.map((unit) => (
                                     <tr key={unit.id}>
                                       <td>{unit.unitNumber}</td>
-                                      <td>${unit.monthlyRent.toFixed(2)}</td>
+                                      <td>{money(unit.monthlyRent.toFixed(2))}</td>
                                       <td>
                                         {unit.leases.length > 0
                                           ? unit.leases[0].tenant.name
