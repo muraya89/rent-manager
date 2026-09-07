@@ -38,7 +38,7 @@ export default function DashboardContent({
       fluid
       className="mx-auto flex min-h-screen w-full max-w-none px-0"
     >
-      <section className="min-w-0 flex-1 px-4 py-4 sm:px-8 lg:px-10 lg:py-7">
+      <section className="min-w-0 flex-1 py-4 lg:py-7">
         <DashboardHeader
           query={query}
           onQueryChange={setQuery}
