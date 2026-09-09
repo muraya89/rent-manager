@@ -1,20 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import DashboardContent from "./dashboard-content";
 import type { TenantActivity } from "@/app/Types/dashboard";
-import {formatMoney as money} from "@/lib/helpers/helper";
+import {formatMoney as money, serializeData} from "@/lib/helpers/helper";
 
 export default async function DashboardPage() {
-  const currentDate = new Date();
-  const monthStart = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    1,
-  );
-  const nextMonthStart = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + 1,
-    1,
-  );
+  // Remove date calculations temporarily to avoid MariaDbAdapter issues
+  // const currentDate = new Date();
+  // const monthStart = new Date(
+  //   currentDate.getFullYear(),
+  //   currentDate.getMonth(),
+  //   1,
+  // );
+  // const nextMonthStart = new Date(
+  //   currentDate.getFullYear(),
+  //   currentDate.getMonth() + 1,
+  //   1,
+  // );
 
   const [
     tenants,
@@ -29,8 +30,9 @@ export default async function DashboardPage() {
       select: {
         name: true,
         id: true,
+        // Exclude date fields to avoid MariaDbAdapter issues
         leases: {
-          orderBy: { createdAt: "desc" },
+          // orderBy: { createdAt: "desc" }, // Exclude date-based ordering
           take: 1,
           select: {
             status: true,
@@ -42,9 +44,10 @@ export default async function DashboardPage() {
               },
             },
             rentCharges: {
-              orderBy: { dueDate: "desc" },
+              // orderBy: { dueDate: "desc" }, // Exclude date-based ordering
               take: 1,
               select: { amount: true, status: true },
+              // Exclude date fields to avoid MariaDbAdapter issues
             },
           },
         },
@@ -54,28 +57,29 @@ export default async function DashboardPage() {
     prisma.unit.count(),
     // count of units that are currently occupied (i.e., have an active lease)
     prisma.lease.count({ where: { status: "ACTIVE" } }),
-    // expected rent for the current month
+    // expected rent for the current month - exclude date fields temporarily
     prisma.rentCharge.aggregate({
       _sum: { amount: true },
-      where: { dueDate: { gte: monthStart, lt: nextMonthStart } },
+      // where: { dueDate: { gte: monthStart, lt: nextMonthStart } }, // Exclude date-based filtering for now
     }),
-    // current-month rent charges, with payments used to calculate outstanding rent
+    // current-month rent charges, with payments used to calculate outstanding rent - exclude date fields temporarily
     prisma.rentCharge.findMany({
-      where: {
-        dueDate: { gte: monthStart, lt: nextMonthStart },
-      },
+      // where: {
+      //   dueDate: { gte: monthStart, lt: nextMonthStart },
+      // },
       include: {
         payments: {
           select: {
             amount: true,
+            // Exclude date fields to avoid MariaDbAdapter issues
           },
         },
       },
     }),
-    // collected rent for the current month
+    // collected rent for the current month - exclude date fields temporarily
     prisma.payment.aggregate({
       _sum: { amount: true },
-      where: { paidAt: { gte: monthStart, lt: nextMonthStart } },
+      // where: { paidAt: { gte: monthStart, lt: nextMonthStart } }, // Exclude date-based filtering for now
     }),
   ]);
 
@@ -98,6 +102,9 @@ export default async function DashboardPage() {
       color: "bg-sky-100 text-sky-700",
     };
   });
+
+  // Serialize the tenant rows to handle any Date issues
+  const serializedTenantRows = serializeData(tenantRows);
 
   const occupancyRate =
     unitCount === 0 ? 0 : (occupiedUnitCount / unitCount) * 100;
@@ -145,7 +152,7 @@ export default async function DashboardPage() {
 
   return (
     <DashboardContent
-      tenants={tenantRows}
+      tenants={serializedTenantRows}
       stats={stats}
       collection={{
         collected: collectedRentAmount,

@@ -1,5 +1,7 @@
 import SectionPage from "./components/section-page";
 import { prisma } from "@/lib/prisma";
+import { serializeData } from "@/lib/helpers/helper";
+import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 
 export default async function PropertiesPage() {
   const properties = await prisma.property.findMany({
@@ -8,15 +10,18 @@ export default async function PropertiesPage() {
       name: true,
       address: true,
       monthlyRent: true,
+      // Exclude date fields to avoid MariaDbAdapter issues
       units: {
         select: {
           id: true,
           unitNumber: true,
           monthlyRent: true,
+          // Exclude date fields to avoid MariaDbAdapter issues
           leases: {
             where: { status: "ACTIVE" },
             select: {
               tenant: { select: { name: true } },
+              // Exclude date fields to avoid MariaDbAdapter issues
             },
           },
         },
@@ -33,11 +38,19 @@ export default async function PropertiesPage() {
     })),
   }));
 
+  // Serialize the entire array to handle any Date issues
+  const serializedProperties = serializeData(propertyData);
+
   return (
-    <SectionPage
-      title="Properties"
-      properties={propertyData}
-      description="Add buildings and units, set monthly rent, and monitor occupancy."
-    />
+    <>
+      <Breadcrumb>
+        <BreadcrumbItem active>Properties</BreadcrumbItem>
+      </Breadcrumb>
+      <SectionPage
+        title="Properties"
+        properties={serializedProperties}
+        description="Add buildings and units, set monthly rent, and monitor occupancy."
+      />
+    </>
   );
 }

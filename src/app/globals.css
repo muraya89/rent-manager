@@ -3,7 +3,7 @@
 
 :root { --background: #f7f8fc; --foreground: #2b313c; --primary: #387FFB; --primary-hover: #81A4CD; --primary-active: #2660A4; --secondary: #3E7CB1; --success: #198754; --info: #0dcaf0; --warning: #ffc107; --danger: #dc3545; --light: #f8f9fa; --dark: #212529; }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
+body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-inter), sans-serif; }
 button, input { font: inherit; }
 button { cursor: pointer; }
 
@@ -40,4 +40,8 @@ button { cursor: pointer; }
 .rentwise-nav .nav-link.is-active, .rentwise-nav .nav-link.active { color: var(--primary); background: #2661a413; box-shadow: inset 3px 0 #b7b0ff; }
 .rentwise-help { background: var(--primary); box-shadow: 0 12px 28px rgba(14, 10, 46, .25); }
 .mobile-menu-button { display: none !important; }
+.no-underline{
+    text-decoration: none;
+    color: black;
+}
 @media (max-width: 991.98px) { .mobile-menu-button { display: grid !important; } }

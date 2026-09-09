@@ -9,14 +9,10 @@ import {
   CardText,
   Col,
   Row,
-  Table,
+  Badge,
 } from "reactstrap";
 import SectionPage from "@/app/shared-components/section-page";
 import { Property } from "@/app/Types/index";
-import { Fragment, useState } from "react";
-import { formatMoney as money } from "@/lib/helpers/helper";
-import CustomModal from "@/app/shared-components/modal";
-import AddUnitForm from "./addUnitForm";
 import { useRouter } from "next/navigation";
 
 export default function PropertiesSectionPage({
@@ -35,27 +31,31 @@ export default function PropertiesSectionPage({
         {properties.length > 0 ? (
           <Row>
             {properties.map((property) => (
-              <Col key={property.id} md="3">
+              <Col key={property.id} md="4">
                 <Card
                   style={{
                     width: "18rem",
-                     cursor: "pointer"
+                    cursor: "pointer",
                   }}
                   onClick={() =>
                     router.push(`/dashboard/properties/${property.id}`)
                   }
                 >
-                  <img alt="Sample" src="https://picsum.photos/300/200" />
+                  <img
+                    alt="Sample"
+                    src="https://picsum.photos/300/200"
+                    className="rounded-t-xl"
+                  />
                   <CardBody>
                     <CardTitle tag="h5">{property.name}</CardTitle>
                     <CardSubtitle className="mb-2 text-muted" tag="h6">
-                      Card subtitle
+                      {property.address}
                     </CardSubtitle>
                     <CardText>
-                      Some quick example text to build on the card title and
-                      make up the bulk of the card‘s content.
+                      <Badge color="secondary">
+                        {property.units.length} &thinsp; units
+                      </Badge>
                     </CardText>
-                    <Button>Button</Button>
                   </CardBody>
                 </Card>
               </Col>

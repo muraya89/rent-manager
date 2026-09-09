@@ -1,35 +1,75 @@
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 
 export default async function PropertyUnits({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  console.log("PropertyUnits START");
-
   const { id } = await params;
+  const propertyId = Number(id);
 
-  console.log("ID:", id);
-
-  const property = await prisma.property.findUnique({
-    where: {
-      id: Number(id),
-    },
-    include: {
-      units: true,
-    },
-  });
-
-  console.log("AFTER PRISMA");
-
-  if (!property) {
-    return <div>Property not found</div>;
+  if (Number.isNaN(propertyId)) {
+    return <div>Invalid property ID</div>;
   }
 
-  console.log("PROPERTY ID:", property.id);
-  console.log("PROPERTY NAME:", property.name);
-  console.log("UNIT COUNT:", property.units.length);
+  let property;
+  let units;
 
-  return <div>Property loaded successfully</div>;
+  try {
+    property = await prisma.property.findUnique({
+      where: {
+        id: propertyId,
+      },
+      select: {
+        id: true,
+        name: true,
+        address: true,
+        monthlyRent: true,
+      },
+    });
+
+    if (!property) {
+      return <div>Property not found</div>;
+    }
+
+    units = await prisma.unit.findMany({
+      where: {
+        propertyId,
+      },
+      select: {
+        id: true,
+        unitNumber: true,
+        monthlyRent: true,
+        propertyId: true,
+      },
+    });
+  } catch (error) {
+    console.error("Error in PropertyUnits:", error);
+
+    return (
+      <div>
+        Error loading property:{" "}
+        {error instanceof Error ? error.message : "Unknown error"}
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <Link href="/dashboard/properties" className="no-underline">
+            Properties
+          </Link>
+        </BreadcrumbItem>
+        <BreadcrumbItem active>Units</BreadcrumbItem>
+      </Breadcrumb>
+
+      <div>Property: {property.name}</div>
+
+      <div>Units: {units.length}</div>
+    </>
+  );
 }
-  

@@ -6,7 +6,7 @@ export function formatMoney(
 
 export function serializeData<T>(data: T): T {
   return JSON.parse(
-    JSON.stringify(data, (_, value) => {
+    JSON.stringify(data, (key, value) => {
       if (typeof value === "bigint") {
         return Number(value);
       }
@@ -16,7 +16,18 @@ export function serializeData<T>(data: T): T {
       }
 
       if (value instanceof Date) {
-        return Number.isNaN(value.getTime()) ? null : value.toISOString();
+        // Check if the date is valid before converting to ISO string
+        const time = value.getTime();
+        if (Number.isNaN(time) || !isFinite(time)) {
+          console.log("Invalid date found for key:", key, "value:", value);
+          return null;
+        }
+        try {
+          return value.toISOString();
+        } catch (error) {
+          console.log("Error converting date to ISO for key:", key, "error:", error);
+          return null;
+        }
       }
 
       return value;
