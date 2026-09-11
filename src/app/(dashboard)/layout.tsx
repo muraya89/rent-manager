@@ -1,6 +1,7 @@
 "use client";
 import { Sidebar } from "@/app/(dashboard)/dashboard/sidebar";
 import { useState } from "react";
+import React from "react";
 
 export default function DashboardLayout({
   children,

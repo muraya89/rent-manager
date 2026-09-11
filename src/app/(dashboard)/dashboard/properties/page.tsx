@@ -35,6 +35,8 @@ export default async function PropertiesPage() {
     units: property.units.map((unit) => ({
       ...unit,
       monthlyRent: Number(unit.monthlyRent),
+      // Keep leases as-is since we only select tenant name (no Decimals)
+      leases: unit.leases || [],
     })),
   }));
 
@@ -42,15 +44,18 @@ export default async function PropertiesPage() {
   const serializedProperties = serializeData(propertyData);
 
   return (
-    <>
-      <Breadcrumb>
+    <div className="px-4">
+      <Breadcrumb className="px-4">
         <BreadcrumbItem active>Properties</BreadcrumbItem>
       </Breadcrumb>
+
+      <hr />
+
       <SectionPage
         title="Properties"
         properties={serializedProperties}
         description="Add buildings and units, set monthly rent, and monitor occupancy."
       />
-    </>
+    </div>
   );
 }

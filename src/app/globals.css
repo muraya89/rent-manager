@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 
-:root { --background: #f7f8fc; --foreground: #2b313c; --primary: #387FFB; --primary-hover: #81A4CD; --primary-active: #2660A4; --secondary: #3E7CB1; --success: #198754; --info: #0dcaf0; --warning: #ffc107; --danger: #dc3545; --light: #f8f9fa; --dark: #212529; }
+:root { --background: #f7f8fc; --foreground: #2b313c; --primary: #387FFB; --primary-hover: #E1F5FE; --primary-active: #2660A4; --secondary: #3E7CB1; --success: #198754; --info: #0dcaf0; --warning: #ffc107; --danger: #dc3545; --light: #f8f9fa; --dark: #212529; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--font-inter), sans-serif; }
 button, input { font: inherit; }
@@ -26,7 +26,9 @@ button { cursor: pointer; }
 .alert-primary { --bs-alert-color: #3730a3; --bs-alert-bg: #eef2ff; --bs-alert-border-color: #d9ddff; }
 .text-primary { color: var(--primary) !important; }
 .bg-primary { background-color: var(--primary) !important; }
+.bg-secondary { background-color: var(--primary-hover) !important; }
 .text-secondary { color: var(--primary-hover) !important; }
+.chip--color{background-color: rgba(128, 128, 128, 0.459) !important;}
 /* .text-base { font-size: 2rem; line-height: 1.5rem; color: var(--foreground) } */
 
 .rentwise-sidebar { background: white; box-shadow: 16px 0 40px rgba(34, 27, 79, .08); }

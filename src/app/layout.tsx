@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Manrope, Inter, Poppins, Plus_Jakarta_Sans, Outfit, Space_Grotesk } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
+import React from "react";
 
 // Choose ONE of these fonts by uncommenting it and commenting out the others:
 
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
   description: "Manage properties, tenants, and rent payments in one place.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
@@ -61,4 +62,5 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   );
+  
 }

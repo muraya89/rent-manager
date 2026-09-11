@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, Container } from "reactstrap";
+import { CardBody, Container } from "reactstrap";
+import React from "react";
 
 export default function SectionPage({
   title,
@@ -12,21 +13,22 @@ export default function SectionPage({
   children: React.ReactNode;
 }) {
   return (
-    <Container className="mt-4 overflow-hidden rounded-2xl">
-      {/* <CardBody className="p-0"> */}
-        {/* <div className="bg-primary px-7 py-9 text-white sm:px-10 sm:py-12"> */}
+    <>
+      <CardBody className="p-0">
+        <div className="px-4">
           {/* <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-[.14em] text-indigo-100">
             Rentwise workspace
           </span> */}
-          <h1 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
+          <h4 className="font-bold tracking-tight sm:text-4xl">
             {title}
-          </h1>
-          <p className="mt-3 max-w-xl text-sm leading-6 sm:text-base">
+          </h4>
+          <span className="max-w-xl text-sm leading-6 sm:text-base">
             {description}
-          </p>
-        {/* </div> */}
+          </span>
+        </div>
+
         {children}
-      {/* </CardBody> */}
-    </Container>
+      </CardBody>
+    </>
   );
 }

@@ -8,6 +8,7 @@ export interface Property {
     unitNumber: string;
     monthlyRent: number;
     leases: Array<{
+      id: number;
       tenant: {
         name: string;
       };

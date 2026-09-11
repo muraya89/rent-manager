@@ -27,7 +27,7 @@ export default function PropertiesSectionPage({
   const router = useRouter();
   return (
     <SectionPage title={title} description={description}>
-      <div className="">
+      <div className="mt-5 px-4">
         {properties.length > 0 ? (
           <Row>
             {properties.map((property) => (
@@ -52,7 +52,7 @@ export default function PropertiesSectionPage({
                       {property.address}
                     </CardSubtitle>
                     <CardText>
-                      <Badge color="secondary">
+                      <Badge className="chip--color">
                         {property.units.length} &thinsp; units
                       </Badge>
                     </CardText>
