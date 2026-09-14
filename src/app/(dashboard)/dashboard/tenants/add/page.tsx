@@ -2,11 +2,7 @@ import AddTenantForm from "../components/addTenantForm";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  Form,
-  FormGroup,
-  Label,
   Card,
-  CardBody,
 } from "reactstrap";
 import Link from "next/link";
 

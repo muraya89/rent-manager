@@ -3,14 +3,13 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  Form,
   FormGroup,
   Label,
   Card,
   CardBody,
 } from "reactstrap";
 import Link from "next/link";
-import { Formik, Field } from "formik";
+import { Formik, Field, Form } from "formik";
 import { createTenant } from "@/lib/actions/tenantActions";
 import { TenantFormValues } from "@/app/Types/tenant";
 
@@ -36,7 +35,9 @@ export default function addTenantForm() {
       <div>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => createTenant(values)}
+          onSubmit={async (values) => {
+            await createTenant(values);
+          }}
         >
           <Form>
             <div className="px-4 py-6">
