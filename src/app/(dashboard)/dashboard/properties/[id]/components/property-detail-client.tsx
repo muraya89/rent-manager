@@ -9,6 +9,7 @@ import {
   Table,
 } from "reactstrap";
 import CustomBadge from "@/app/shared-components/custom-badge";
+import Alert from "@/app/shared-components/alert";
 
 interface Unit {
   id: number;
@@ -33,12 +34,15 @@ interface Property {
 interface PropertyDetailClientProps {
   property: Property;
   units: Unit[];
+  alert: string;
 }
 
 export default function PropertyDetailClient({
   property,
   units,
+  alert
 }: PropertyDetailClientProps) {
+  
   return (
     <>
       {/* Property Information Card */}
@@ -82,6 +86,8 @@ export default function PropertyDetailClient({
               </Button>
             </Link>
           </div>
+          
+                <Alert message={ alert } />
           <hr />
           <Table responsive>
             <thead>

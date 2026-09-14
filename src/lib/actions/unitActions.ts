@@ -10,11 +10,6 @@ export async function createUnit(
     monthlyRent: number;
   },
 ) {
-    console.log('data',{
-      propertyId,
-      unitNumber: values.unitNumber,
-      monthlyRent: values.monthlyRent,
-    });
   await prisma.unit.create({
     data: {
       propertyId,
@@ -23,5 +18,9 @@ export async function createUnit(
     },
   });
 
-  redirect(`/dashboard/properties/${propertyId}`);
+  redirect(
+    `/dashboard/properties/${propertyId}?success=Unit%20${encodeURIComponent(
+      values.unitNumber,
+    )}%20added%20successfully`,
+  );
 }

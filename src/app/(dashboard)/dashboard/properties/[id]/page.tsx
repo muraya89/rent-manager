@@ -8,11 +8,14 @@ import PropertyDetailClient from "./components/property-detail-client";
 
 export default async function PropertyDetail({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ success?: string }>;
 }) {
   const { id } = await params;
   const propertyId = Number(id);
+  const { success } = await searchParams;
 
   if (Number.isNaN(propertyId)) {
     return <div>Invalid property ID</div>;
@@ -91,7 +94,11 @@ export default async function PropertyDetail({
 
         <hr />
 
-        <PropertyDetailClient property={formattedProperty} units={formattedUnits} />
+        <PropertyDetailClient
+          property={formattedProperty}
+          units={formattedUnits}
+          alert={success}
+        />
       </div>
     </>
   );
