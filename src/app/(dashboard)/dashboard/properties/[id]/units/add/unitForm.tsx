@@ -1,32 +1,44 @@
-"use client"
+"use client";
 
-import { Breadcrumb, BreadcrumbItem, Card, Label, FormGroup } from "reactstrap";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  Card,
+  Label,
+  FormGroup,
+  Input,
+} from "reactstrap";
 import Link from "next/link";
 import { Form, Formik, Field } from "formik";
-import { createUnit } from "@/lib/actions/unitActions"
+import { createUnit } from "@/lib/actions/unitActions";
+import { UnitFormValues } from "@/app/Types/unit";
+import { useState } from "react";
+import AddTenantForm from "@/app/(dashboard)/dashboard/tenants/components/addTenantForm";
 
 interface AddUnitFormProps {
   propertyId: number;
   propertyName: string;
 }
 
+export default function addUnitForm({
+  propertyId,
+  propertyName,
+}: AddUnitFormProps) {
+  const initialValues: UnitFormValues = {
+    unitNumber: "",
+    monthlyRent: 0,
+  };
+  const PlainInput = ({ field, form, ...props }) => {
+    return (
+      <input
+        {...field}
+        {...props}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    );
+  };
 
-export default function addUnitForm({ propertyId, propertyName }: AddUnitFormProps) {
-    const initialValues: UnitFormValues = {
-      unitNumber: "",
-      monthlyRent: "",
-    };
-    const MyInput = ({ field, form, ...props }) => {
-      return (
-        <input
-          {...field}
-          {...props}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      );
-    };
-
-
+  const [isOccupied, setIsOccupied] = useState(false);
 
   return (
     <div className="px-4">
@@ -49,7 +61,7 @@ export default function addUnitForm({ propertyId, propertyName }: AddUnitFormPro
           </h3>
         </div>
         <div className="px-4 py-6">
-          <h2 className="text-2xl font-semibold mb-4">Unit Details</h2>
+          <h5 className="text-2xl font-semibold mb-4">Unit Details</h5>
 
           <hr />
 
@@ -67,7 +79,7 @@ export default function addUnitForm({ propertyId, propertyName }: AddUnitFormPro
                 <Label for="unitNumber">Unit Number</Label>
                 <Field
                   id="unitNumber"
-                  component={MyInput}
+                  component={PlainInput}
                   name="unitNumber"
                   type="text"
                   required
@@ -79,13 +91,26 @@ export default function addUnitForm({ propertyId, propertyName }: AddUnitFormPro
                 <Label for="monthlyRent">Monthly Rent</Label>
                 <Field
                   id="monthlyRent"
-                  component={MyInput}
+                  component={PlainInput}
                   name="monthlyRent"
                   placeholder="e.g., 15000"
                   type="number"
                   required
                 ></Field>
               </FormGroup>
+
+              {/* <FormGroup switch>
+                <Input
+                  type="switch"
+                  checked={isOccupied}
+                  onChange={() => {
+                    setIsOccupied(!isOccupied);
+                  }}
+                />
+                <Label check>Is Occupied</Label>
+              </FormGroup>
+
+              {isOccupied ? <AddTenantForm /> : ""} */}
 
               <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
                 <Link href={`/dashboard/properties/${propertyId}`}>

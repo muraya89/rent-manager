@@ -16,10 +16,12 @@ export default async function TenantsPage() {
   const serializedTenants = serializeData(tenants);
 
   return (
-    <SectionPage
-      title="Tenants"
-      description="Manage tenant profiles, leases, contacts, and balances."
-      tenants={serializedTenants}
-    />
+    <>
+        <SectionPage
+          title="Tenants"
+          description="Manage tenant profiles, leases, contacts, and balances."
+          tenants={serializedTenants}
+        />
+    </>
   );
 }

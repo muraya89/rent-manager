@@ -1,111 +1,111 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+  // This is your Prisma schema file,
+  // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
+  // Get a free hosted Postgres database in seconds: `npx create-db`
 
-generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
-}
+  generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+  }
 
-datasource db {
-  provider = "mysql"
-}
+  datasource db {
+    provider = "mysql"
+  }
 
-model Property {
-  id          Int      @id @default(autoincrement())
-  name        String
-  address     String
-  monthlyRent Decimal
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  model Property {
+    id          Int      @id @default(autoincrement())
+    name        String
+    address     String
+    monthlyRent Decimal
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 
-  units       Unit[]
-}
+    units       Unit[]
+  }
 
-model Unit {
-  id          Int      @id @default(autoincrement())
-  propertyId  Int
-  unitNumber  String
-  monthlyRent Decimal
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  model Unit {
+    id          Int      @id @default(autoincrement())
+    propertyId  Int
+    unitNumber  String
+    monthlyRent Decimal
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 
-  property    Property @relation(fields: [propertyId], references: [id])
-  leases      Lease[]
-}
+    property    Property @relation(fields: [propertyId], references: [id])
+    leases      Lease[]
+  }
 
-model Tenant {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  phone     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  model Tenant {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String   @unique
+    phone     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-  leases    Lease[]
-}
+    leases    Lease[]
+  }
 
-enum LeaseStatus {
-  ACTIVE
-  EXPIRED
-  TERMINATED
-}
+  enum LeaseStatus {
+    ACTIVE
+    EXPIRED
+    TERMINATED
+  }
 
-model Lease {
-  id          Int         @id @default(autoincrement())
-  tenantId    Int
-  unitId      Int
-  startDate   DateTime
-  endDate     DateTime?
-  monthlyRent Decimal
-  status      LeaseStatus @default(ACTIVE)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  model Lease {
+    id          Int         @id @default(autoincrement())
+    tenantId    Int
+    unitId      Int
+    startDate   DateTime
+    endDate     DateTime?
+    monthlyRent Decimal
+    status      LeaseStatus @default(ACTIVE)
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
 
-  tenant      Tenant      @relation(fields: [tenantId], references: [id])
-  unit        Unit        @relation(fields: [unitId], references: [id])
-  rentCharges RentCharge[]
-}
+    tenant      Tenant      @relation(fields: [tenantId], references: [id])
+    unit        Unit        @relation(fields: [unitId], references: [id])
+    rentCharges RentCharge[]
+  }
 
-enum RentStatus {
-  UNPAID
-  PARTIALLY_PAID
-  PAID
-  OVERDUE
-}
+  enum RentStatus {
+    UNPAID
+    PARTIALLY_PAID
+    PAID
+    OVERDUE
+  }
 
-model RentCharge {
-  id          Int        @id @default(autoincrement())
-  leaseId     Int
-  amount      Decimal
-  dueDate     DateTime
-  period      String
-  status      RentStatus @default(UNPAID)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  model RentCharge {
+    id          Int        @id @default(autoincrement())
+    leaseId     Int
+    amount      Decimal
+    dueDate     DateTime
+    period      String
+    status      RentStatus @default(UNPAID)
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
 
-  lease       Lease      @relation(fields: [leaseId], references: [id])
-  payments    Payment[]
-}
+    lease       Lease      @relation(fields: [leaseId], references: [id])
+    payments    Payment[]
+  }
 
-enum PaymentMethod {
-  CASH
-  MPESA
-  BANK_TRANSFER
-  CARD
-  OTHER
-}
+  enum PaymentMethod {
+    CASH
+    MPESA
+    BANK_TRANSFER
+    CARD
+    OTHER
+  }
 
-model Payment {
-  id           Int           @id @default(autoincrement())
-  rentChargeId Int
-  amount       Decimal
-  paidAt       DateTime      @default(now())
-  method       PaymentMethod
-  reference    String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  model Payment {
+    id           Int           @id @default(autoincrement())
+    rentChargeId Int
+    amount       Decimal
+    paidAt       DateTime      @default(now())
+    method       PaymentMethod
+    reference    String?
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
 
-  rentCharge   RentCharge    @relation(fields: [rentChargeId], references: [id])
-}
+    rentCharge   RentCharge    @relation(fields: [rentChargeId], references: [id])
+  }

@@ -5,3 +5,9 @@ export interface Tenant {
   phone: string;
   propertyId: number;
 }
+
+export interface TenantFormValues {
+  name: string;
+  email: string;
+  phone: string;
+}

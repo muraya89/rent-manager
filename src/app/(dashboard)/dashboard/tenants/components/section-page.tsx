@@ -1,88 +1,125 @@
 "use client";
 
-import { Button, Card, CardBody, Col, Row, Table } from "reactstrap";
-import SectionPage from "@/app/shared-components/section-page";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  Col,
+  Row,
+  Table,
+  Breadcrumb,
+ BreadcrumbItem} from "reactstrap";
+import Link from "next/link";
 import { Tenant } from "@/app/Types/index";
+import Alert from "@/app/shared-components/alert";
+import QuickAction from "@/app/shared-components/quick-action";
+import EmptyState from "@/app/shared-components/emptyState";
 
 export default function TenantsSectionPage({
   title,
   description,
   tenants,
+  alert,
 }: {
   tenants: Tenant[];
   title: string;
   description: string;
+  alert: string;
 }) {
   return (
-    <SectionPage title={title} description={description}>
-      <div className="p-7 sm:p-10">
-        {tenants.length > 0 ? (
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tenants.map((tenant) => (
-                <tr key={tenant.id}>
-                  <td>{tenant.name}</td>
-                  <td>{tenant.email}</td>
-                  <td>{tenant.phone}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        ) : (
-          <Row className="g-4">
-            <Col md="8">
-              <EmptyState title={title} />
-            </Col>
-            <Col md="4">
-              <QuickAction title={title} />
-            </Col>
-          </Row>
-        )}
-      </div>
-    </SectionPage>
-  );
-}
+    <div className="px-4">
+      <Breadcrumb className="px-4">
+        <BreadcrumbItem active>
+          <Link href="/dashboard/tenants" className="no-underline">
+            Tenants
+          </Link>
+        </BreadcrumbItem>
+      </Breadcrumb>
+      <hr />
+      <Card className="border-0 mb-4">
+        <div className="bg-secondary px-4 py-5 sm:px-10 sm:py-12 rounded-t-lg">
+          <h3 className="tracking-tight sm:text-4xl">{title}</h3>
+          <p className="text-muted mt-2">{description}</p>
+        </div>
+        <CardBody className="px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <p className="text-muted text-sm">Total Tenants</p>
+              <p className="text-2xl font-semibold">{tenants.length}</p>
+            </div>
+            {/* <div>
+              <p className="text-muted text-sm">Occupied Units</p>
+              <p className="text-2xl font-semibold">
+                {units.filter((u) => u.leases.length > 0).length}
+              </p>
+            </div>
+            <div>
+              <p className="text-muted text-sm">Vacant Units</p>
+              <p className="text-2xl font-semibold">
+                {units.filter((u) => u.leases.length === 0).length}
+              </p>
+            </div> */}
+          </div>
+        </CardBody>
+      </Card>
 
-function EmptyState({ title }: { title: string }) {
-  return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-12 text-center">
-      <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-indigo-100 text-xl font-light text-[#4437d8]">
-        +
-      </div>
-      <p className="font-semibold text-slate-700">
-        Your {title.toLowerCase()} will appear here.
-      </p>
-      <p className="mt-2 text-sm text-slate-500">
-        This route is ready for its data table and create form.
-      </p>
+      <Card className="border-0">
+        <CardBody className="px-4">
+          <div className="flex justify-between items-center mb-4">
+            <CardTitle className="text-2xl mb-0"></CardTitle>
+            <Link href={`/dashboard/tenants/add`}>
+              <Button color="primary" className="rounded-xl px-4 py-2">
+                Add Tenant
+              </Button>
+            </Link>
+          </div>
+
+          <Alert message={alert} />
+          <hr />
+          <div className="p-7 sm:p-10">
+            {tenants.length > 0 ? (
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tenants.map((tenant) => (
+                    <tr key={tenant.id}>
+                      <td>{tenant.name}</td>
+                      <td>{tenant.email}</td>
+                      <td>{tenant.phone}</td>
+                      <td>
+                        <Link
+                          href={`/dashboard/tenants/${tenant.id}`}
+                          className="text-primary"
+                        >
+                          View Details
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            ) : (
+              <Row className="g-4">
+                <Col md="8">
+                  <EmptyState title={title} />
+                </Col>
+                <Col md="4">
+                  <QuickAction title={title} />
+                </Col>
+              </Row>
+            )}
+          </div>
+        </CardBody>
+      </Card>
     </div>
   );
 }
 
-function QuickAction({ title }: { title: string }) {
-  const singular = title.endsWith("ies")
-    ? `${title.slice(0, -3)}y`
-    : title.slice(0, -1);
-  return (
-    <Card className="h-full border-indigo-100 bg-indigo-50 shadow-none">
-      <CardBody className="p-5">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#4437d8]">
-          Quick action
-        </p>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          Start by adding your first record to make this area useful.
-        </p>
-        <Button color="primary" className="mt-4 rounded-xl px-4 py-2">
-          Add {singular}
-        </Button>
-      </CardBody>
-    </Card>
-  );
-}
