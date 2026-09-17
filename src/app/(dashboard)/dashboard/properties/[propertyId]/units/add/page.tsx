@@ -1,25 +1,22 @@
 import { prisma } from "@/lib/prisma";
 import AddUnitForm from "./unitForm";
-import  Alert  from "@/app/shared-components/alert";
 
 export default async function AddUnitPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ success?: string }>;
 }) {
-  const { id } = await params;
-  const propertyId = Number(id);
-  const { success } = await searchParams;
+  const { propertyId } = await params;
+  const property_id = Number(propertyId);
 
-  if (Number.isNaN(propertyId)) {
+  if (Number.isNaN(property_id)) {
     return <div>Invalid property ID</div>;
   }
 
   const property = await prisma.property.findUnique({
     where: {
-      id: propertyId,
+      id: property_id,
     },
     select: {
       id: true,

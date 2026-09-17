@@ -12,8 +12,7 @@ import Link from "next/link";
 import { Form, Formik, Field } from "formik";
 import { createUnit } from "@/lib/actions/unitActions";
 import { UnitFormValues } from "@/app/Types/unit";
-import { useState } from "react";
-import AddTenantForm from "@/app/(dashboard)/dashboard/tenants/components/addTenantForm";
+import TenantForm from "@/app/(dashboard)/dashboard/tenants/components/TenantForm";
 
 interface AddUnitFormProps {
   propertyId: number;
@@ -27,6 +26,11 @@ export default function addUnitForm({
   const initialValues: UnitFormValues = {
     unitNumber: "",
     monthlyRent: 0,
+    isOccupied: false,
+
+    name: "",
+    email: "",
+    phone: "",
   };
   const PlainInput = ({ field, form, ...props }) => {
     return (
@@ -37,8 +41,6 @@ export default function addUnitForm({
       />
     );
   };
-
-  const [isOccupied, setIsOccupied] = useState(false);
 
   return (
     <div className="px-4">
@@ -73,7 +75,7 @@ export default function addUnitForm({
                 monthlyRent: Number(values.monthlyRent),
               })
             }
-          >
+          >{({ values, setFieldValue }) => (
             <Form className="mt-4">
               <FormGroup>
                 <Label for="unitNumber">Unit Number</Label>
@@ -99,18 +101,19 @@ export default function addUnitForm({
                 ></Field>
               </FormGroup>
 
-              {/* <FormGroup switch>
+              <FormGroup switch>
                 <Input
                   type="switch"
-                  checked={isOccupied}
-                  onChange={() => {
-                    setIsOccupied(!isOccupied);
-                  }}
+                  checked={values.isOccupied}
+                  onChange={(e) =>
+                    setFieldValue("isOccupied", e.target.checked)
+                  }
                 />
+
                 <Label check>Is Occupied</Label>
               </FormGroup>
 
-              {isOccupied ? <AddTenantForm /> : ""} */}
+              {values.isOccupied && <TenantForm /> }
 
               <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
                 <Link href={`/dashboard/properties/${propertyId}`}>
@@ -129,6 +132,7 @@ export default function addUnitForm({
                 </button>
               </div>
             </Form>
+          )}
           </Formik>
         </div>
       </Card>

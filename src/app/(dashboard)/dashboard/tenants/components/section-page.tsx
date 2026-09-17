@@ -67,7 +67,8 @@ export default function TenantsSectionPage({
       <Card className="border-0">
         <CardBody className="px-4">
           <div className="flex justify-between items-center mb-4">
-            <CardTitle className="text-2xl mb-0"></CardTitle>
+            <CardTitle className="mb-0 w-99">
+          <Alert message={alert} /></CardTitle>
             <Link href={`/dashboard/tenants/add`}>
               <Button color="primary" className="rounded-xl px-4 py-2">
                 Add Tenant
@@ -75,7 +76,6 @@ export default function TenantsSectionPage({
             </Link>
           </div>
 
-          <Alert message={alert} />
           <hr />
           <div className="p-7 sm:p-10">
             {tenants.length > 0 ? (

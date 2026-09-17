@@ -34,15 +34,16 @@ interface Property {
 interface PropertyDetailClientProps {
   property: Property;
   units: Unit[];
-  alert: string;
+  unitAlert?: string;
+  tenantAlert?: string;
 }
 
 export default function PropertyDetailClient({
   property,
   units,
-  alert
+  unitAlert,
+  tenantAlert,
 }: PropertyDetailClientProps) {
-  
   return (
     <>
       {/* Property Information Card */}
@@ -86,8 +87,10 @@ export default function PropertyDetailClient({
               </Button>
             </Link>
           </div>
-          
-                <Alert message={ alert } />
+
+          {unitAlert && <Alert message={unitAlert} />}
+
+          {tenantAlert && <Alert message={tenantAlert} />}
           <hr />
           <Table responsive>
             <thead>

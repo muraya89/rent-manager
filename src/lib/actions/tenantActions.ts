@@ -27,3 +27,20 @@ export async function createTenant(values: {
     )}%20added%20successfully`,
   );
 }
+
+export async function viewTenant(values: number) {
+  await prisma.tenant.findUnique({
+    where: { id: values },
+    include: {
+      property: true,
+      leases: {
+        include: {
+          tenant: true,
+        },
+        orderBy: {
+          startDate: "desc",
+        },
+      },
+    },
+  });
+}

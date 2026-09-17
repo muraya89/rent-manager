@@ -10,14 +10,18 @@ export default async function PropertyDetail({
   params,
   searchParams,
 }: {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ success?: string }>;
+  params: Promise<{ propertyId: string }>;
+  searchParams: Promise<{
+    unitSuccess?: string;
+    tenantSuccess?: string;
+  }>;
 }) {
-  const { id } = await params;
-  const propertyId = Number(id);
-  const { success } = await searchParams;
+  const { propertyId } = await params;
+  const property_id = Number(propertyId);
+  const { unitSuccess, tenantSuccess } = await searchParams;
 
-  if (Number.isNaN(propertyId)) {
+
+  if (Number.isNaN(property_id)) {
     return <div>Invalid property ID</div>;
   }
 
@@ -27,7 +31,7 @@ export default async function PropertyDetail({
   try {
     property = await prisma.property.findUnique({
       where: {
-        id: propertyId,
+        id: property_id,
       },
       select: {
         id: true,
@@ -43,7 +47,7 @@ export default async function PropertyDetail({
 
     units = await prisma.unit.findMany({
       where: {
-        propertyId,
+        propertyId: property_id,
       },
       select: {
         id: true,
@@ -97,7 +101,8 @@ export default async function PropertyDetail({
         <PropertyDetailClient
           property={formattedProperty}
           units={formattedUnits}
-          alert={success}
+          unitAlert={unitSuccess}
+          tenantAlert={tenantSuccess}
         />
       </div>
     </>

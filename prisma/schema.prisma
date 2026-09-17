@@ -60,6 +60,7 @@
     endDate     DateTime?
     monthlyRent Decimal
     status      LeaseStatus @default(ACTIVE)
+    terminationReason String?
     createdAt   DateTime    @default(now())
     updatedAt   DateTime    @updatedAt
 
