@@ -9,7 +9,8 @@ import {
   Row,
   Table,
   Breadcrumb,
- BreadcrumbItem} from "reactstrap";
+  BreadcrumbItem,
+} from "reactstrap";
 import Link from "next/link";
 import { Tenant } from "@/app/Types/index";
 import Alert from "@/app/shared-components/alert";
@@ -21,11 +22,19 @@ export default function TenantsSectionPage({
   description,
   tenants,
   alert,
+  leasedTenants,
+  newTenants,
+  expiringTenants,
+  unleasedTenants,
 }: {
   tenants: Tenant[];
   title: string;
   description: string;
   alert: string;
+  leasedTenants: number;
+  newTenants: number;
+  expiringTenants: number;
+  unleasedTenants: number
 }) {
   return (
     <div className="px-4">
@@ -48,18 +57,22 @@ export default function TenantsSectionPage({
               <p className="text-muted text-sm">Total Tenants</p>
               <p className="text-2xl font-semibold">{tenants.length}</p>
             </div>
-            {/* <div>
-              <p className="text-muted text-sm">Occupied Units</p>
-              <p className="text-2xl font-semibold">
-                {units.filter((u) => u.leases.length > 0).length}
-              </p>
+            <div>
+              <p className="text-muted text-sm">Active Tenants</p>
+              <p className="text-2xl font-semibold">{leasedTenants}</p>
             </div>
             <div>
-              <p className="text-muted text-sm">Vacant Units</p>
-              <p className="text-2xl font-semibold">
-                {units.filter((u) => u.leases.length === 0).length}
-              </p>
-            </div> */}
+              <p className="text-muted text-sm">Expiring Soon</p>
+              <p className="text-2xl font-semibold">{expiringTenants}</p>
+            </div>
+            <div>
+              <p className="text-muted text-sm">New Tenants</p>
+              <p className="text-2xl font-semibold">{newTenants}</p>
+            </div>
+            <div>
+              <p className="text-muted text-sm">Without Lease</p>
+              <p className="text-2xl font-semibold">{unleasedTenants.length}</p>
+            </div>
           </div>
         </CardBody>
       </Card>
@@ -68,7 +81,8 @@ export default function TenantsSectionPage({
         <CardBody className="px-4">
           <div className="flex justify-between items-center mb-4">
             <CardTitle className="mb-0 w-99">
-          <Alert message={alert} /></CardTitle>
+              <Alert message={alert} />
+            </CardTitle>
             <Link href={`/dashboard/tenants/add`}>
               <Button color="primary" className="rounded-xl px-4 py-2">
                 Add Tenant
@@ -122,4 +136,3 @@ export default function TenantsSectionPage({
     </div>
   );
 }
-

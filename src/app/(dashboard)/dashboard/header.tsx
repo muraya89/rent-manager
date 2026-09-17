@@ -10,7 +10,6 @@ type Props = {
 export function DashboardHeader({
   query,
   onQueryChange,
-  onAddTenant,
   onOpenMenu,
 }: Props) {
   return (
@@ -42,14 +41,6 @@ export function DashboardHeader({
           <Icon name="bell" size={19} />
           <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white" />
         </button>
-        <Button
-          onClick={onAddTenant}
-          color="primary"
-          className="inline-flex items-center gap-2 rounded-xl border-0 bg-[#4437d8] px-3 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 sm:px-4"
-        >
-          <Icon name="plus" size={18} />
-          <span className="hidden sm:inline">Add tenant</span>
-        </Button>
       </div>
     </header>
   );

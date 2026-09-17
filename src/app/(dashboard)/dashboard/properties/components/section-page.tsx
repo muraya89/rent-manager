@@ -1,19 +1,11 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  CardText,
-  Col,
-  Row,
-  Badge,
-} from "reactstrap";
+import { Badge, Card, CardBody, CardTitle, Col, Row } from "reactstrap";
+import { useRouter } from "next/navigation";
 import SectionPage from "@/app/shared-components/section-page";
 import { Property } from "@/app/Types/index";
-import { useRouter } from "next/navigation";
+import StatCard from "./StatCrd"
+import PropertyCard from "./PropertyCard"
 
 export default function PropertiesSectionPage({
   title,
@@ -23,92 +15,65 @@ export default function PropertiesSectionPage({
   properties: Property[];
   title: string;
   description: string;
-  }) {
+}) {
   const router = useRouter();
+
+  const totalUnits = properties.reduce(
+    (total, property) => total + property.units.length,
+    0,
+  );
+
+  const occupiedUnits = properties.reduce(
+    (total, property) =>
+      total +
+      property.units.filter((unit) => unit.leases && unit.leases.length > 0)
+        .length,
+    0,
+  );
+
+  const vacantUnits = totalUnits - occupiedUnits;
+
   return (
     <SectionPage title={title} description={description}>
-      <div className="mt-5 px-4">
+      <div className="mt-4 px-4 pb-5">
+        {/* Stats */}
+        <Row className="g-3 mb-4">
+          <Col md="4">
+            <StatCard label="Properties" value={properties.length} icon="🏢" />
+          </Col>
+
+          <Col md="4">
+            <StatCard label="Total Units" value={totalUnits} icon="▦" />
+          </Col>
+
+          <Col md="4">
+            <StatCard
+              label="Occupied Units"
+              value={occupiedUnits}
+              icon="✓"
+              secondary={`${vacantUnits} vacant`}
+            />
+          </Col>
+        </Row>
+
+        {/* Property cards */}
         {properties.length > 0 ? (
-          <Row>
+          <Row className="g-4">
             {properties.map((property) => (
-              <Col key={property.id} md="4">
-                <Card
-                  style={{
-                    width: "18rem",
-                    cursor: "pointer",
-                  }}
+              <Col key={property.id} md="6" xl="4">
+                <PropertyCard
+                  property={property}
                   onClick={() =>
                     router.push(`/dashboard/properties/${property.id}`)
                   }
-                >
-                  <img
-                    alt="Sample"
-                    src="https://picsum.photos/300/200"
-                    className="rounded-t-xl"
-                  />
-                  <CardBody>
-                    <CardTitle tag="h5">{property.name}</CardTitle>
-                    <CardSubtitle className="mb-2 text-muted" tag="h6">
-                      {property.address}
-                    </CardSubtitle>
-                    <CardText>
-                      <Badge className="chip--color">
-                        {property.units.length} &thinsp; units
-                      </Badge>
-                    </CardText>
-                  </CardBody>
-                </Card>
+                />
               </Col>
             ))}
           </Row>
         ) : (
-          <Row className="g-4">
-            <Col md="8">
-              <EmptyState title={title} />
-            </Col>
-            <Col md="4">
-              <QuickAction title={title} />
-            </Col>
-          </Row>
+          <EmptyState title={title} />
         )}
       </div>
     </SectionPage>
-  );
-}
-
-function EmptyState({ title }: { title: string }) {
-  return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-12 text-center">
-      <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-indigo-100 text-xl font-light text-[#4437d8]">
-        +
-      </div>
-      <p className="font-semibold text-slate-700">
-        Your {title.toLowerCase()} will appear here.
-      </p>
-      <p className="mt-2 text-sm text-slate-500">
-        This route is ready for its data table and create form.
-      </p>
-    </div>
-  );
-}
-
-function QuickAction({ title }: { title: string }) {
-  const singular = title.endsWith("ies")
-    ? `${title.slice(0, -3)}y`
-    : title.slice(0, -1);
-  return (
-    <Card className="h-full border-indigo-100 bg-indigo-50 shadow-none">
-      <CardBody className="p-5">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#4437d8]">
-          Quick action
-        </p>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          Start by adding your first record to make this area useful.
-        </p>
-        <Button color="primary" className="mt-4 rounded-xl px-4 py-2">
-          Add {singular}
-        </Button>
-      </CardBody>
-    </Card>
   );
 }

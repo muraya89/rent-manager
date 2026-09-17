@@ -1,6 +1,12 @@
 import SectionPage from "./components/section-page";
 import { serializeData } from "@/lib/helpers/helper";
-import {getTenants} from "@/lib/queries/tenantQueries"
+import {
+  getTenants,
+  getLeasedTenant,
+  expiringSoonTenants,
+  NewTenant,
+  getNotLeasedTenant,
+} from "@/lib/queries/tenantQueries";
 
 export default async function TenantsPage({
   searchParams,
@@ -9,6 +15,10 @@ export default async function TenantsPage({
 }) {
   const tenants = await getTenants();
   const { success } = await searchParams;
+  const leasedTenants = await getLeasedTenant()
+  const newTenants = await NewTenant();
+  const expiringTenants = await expiringSoonTenants();
+  const unleasedTenants = await getNotLeasedTenant();
 
   // Serialize the entire array to handle any Date issues
   const serializedTenants = serializeData(tenants);
@@ -20,6 +30,10 @@ export default async function TenantsPage({
         description="Manage tenant profiles, leases, contacts, and balances."
         tenants={serializedTenants}
         alert={success}
+        leasedTenants={leasedTenants}
+        newTenants={newTenants}
+        expiringTenants={expiringTenants}
+        unleasedTenants={unleasedTenants}
       />
     </>
   );
