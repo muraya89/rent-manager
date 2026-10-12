@@ -13,8 +13,10 @@
     "@prisma/client": "^7.9.1",
     "bootstrap": "^5.3.8",
     "formik": "^2.4.9",
+    "lucide-react": "^1.55.0",
     "mariadb": "^3.5.3",
     "next": "16.3.1",
+    "next-auth": "^4.24.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "reactstrap": "^9.2.3"

@@ -1,5 +1,5 @@
 "use client";
-import { Sidebar } from "@/app/(dashboard)/dashboard/sidebar";
+import { Sidebar } from "@/app/dashboard/sidebar";
 import { useState } from "react";
 import React from "react";
 

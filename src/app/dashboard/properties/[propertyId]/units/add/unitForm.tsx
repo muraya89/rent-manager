@@ -12,7 +12,7 @@ import Link from "next/link";
 import { Form, Formik, Field } from "formik";
 import { createUnit } from "@/lib/actions/unitActions";
 import { UnitFormValues } from "@/app/Types/unit";
-import TenantForm from "@/app/(dashboard)/dashboard/tenants/components/TenantForm";
+import TenantForm from "@/app/dashboard/tenants/components/TenantForm";
 
 interface AddUnitFormProps {
   propertyId: number;
