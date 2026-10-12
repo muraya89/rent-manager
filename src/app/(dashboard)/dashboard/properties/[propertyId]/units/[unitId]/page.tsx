@@ -19,7 +19,7 @@ export default async function UnitDetailsPage({
   const unitIdNumber = Number(unitId);
 
   // fetch unit...
-    const unitDetails = await viewUnit(unitIdNumber);
+  const unitDetails = await viewUnit(unitIdNumber);
   const tenants = await getNotLeasedTenant();
 
   return (

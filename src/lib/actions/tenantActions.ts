@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { serializeData } from "@/lib/helpers/helper";
 
 export async function createTenant(values: {
   name: string;
@@ -43,4 +44,24 @@ export async function viewTenant(values: number) {
       },
     },
   });
+}
+
+export async function updateTenant(data: {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+}) {
+  const tenant = await prisma.tenant.update({
+    where: {
+      id: data.id,
+    },
+    data: {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+    },
+  });
+
+  return serializeData(tenant);
 }

@@ -125,3 +125,68 @@ export async function getNotLeasedTenant() {
      };
   }
 }
+
+export async function getTenant(tenantId: string) {
+  const tenant = await prisma.tenant.findUnique({
+    where: {
+      id: Number(tenantId),
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      createdAt: true,
+
+      leases: {
+        orderBy: {
+          startDate: "desc",
+        },
+        select: {
+          id: true,
+          startDate: true,
+          endDate: true,
+          monthlyRent: true,
+          status: true,
+
+          unit: {
+            select: {
+              id: true,
+              unitNumber: true,
+
+              property: {
+                select: {
+                  id: true,
+                  name: true,
+                  address: true,
+                },
+              },
+            },
+          },
+
+          rentCharges: {
+            orderBy: {
+              dueDate: "desc",
+            },
+            select: {
+              id: true,
+              amount: true,
+              dueDate: true,
+              status: true,
+
+              payments: {
+                select: {
+                  id: true,
+                  amount: true,
+                  paidAt: true,
+                  method: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return tenant;
+}
