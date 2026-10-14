@@ -463,7 +463,7 @@ export default function Page() {
             <span>rentwise</span>
           </a>
           <span>© 2026 rentwise, inc.</span>
-          <div className="">
+          <div className="nav-actions">
             <a href="#privacy">Privacy</a>
             <a href="#terms">Terms</a>
             <a href="#contact">Contact</a>

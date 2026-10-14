@@ -7,10 +7,12 @@
 :root {
   --background: #f7f8fc;
   --foreground: #2b313c;
-  --primary: #387ffb;
+  /* --primary: #387ffb; */
+  --primary: #4b1d29;
   --primary-hover: #e1f5fe;
   --primary-active: #2660a4;
-  --secondary: #3e7cb1;
+  /* --secondary: #3e7cb1; */
+  --secondary: #f35b35;
   --success: #198754;
   --info: #0dcaf0;
   --warning: #ffc107;
@@ -302,19 +304,23 @@ button {
   text-decoration: none;
 }
 
-.login{
-    color: var(--foreground);
+.login {
+  color: var(--foreground);
 }
 
 .nav-cta {
-  background: #e4ded8;
-  color: #211b1d;
+  background: var(--secondary);
+  color: #fff !important;
   padding: 11px 16px;
   border-radius: 8px;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   font-weight: 700;
+}
+
+.nav-cta svg {
+  width: 16px;
 }
 
 .mobile-actions,
@@ -401,6 +407,7 @@ button {
   color: white;
   font-size: 14px;
   font-weight: 700;
+  text-decoration: none ;
   box-shadow: 0 8px 22px rgba(18, 77, 62, 0.16);
 }
 
@@ -1589,7 +1596,7 @@ footer div {
     padding: 12px 14px;
   }
 
-  .mobile-actions .login{
+  .mobile-actions .login {
     color: var(--foreground);
     text-decoration: none;
   }
