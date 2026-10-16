@@ -3,6 +3,7 @@ import { Manrope, Inter, Poppins, Plus_Jakarta_Sans, Outfit, Space_Grotesk } fro
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import React from "react";
+import Providers from "./providers";
 
 // Choose ONE of these fonts by uncommenting it and commenting out the others:
 
@@ -59,7 +60,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
   

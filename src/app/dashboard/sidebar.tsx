@@ -12,19 +12,18 @@ import {
 } from "reactstrap";
 import { navigation } from "@/app/data/dashboard";
 import { Icon } from "./dashboard-icon";
+import LogoutButton from "@/app/auth/components/logoutButton";
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
     <div className="flex h-full min-w-0 flex-col px-4 py-5">
       <div className="mb-7 flex items-center gap-3 px-3">
-        <div className="rentwise-mark flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-bold text-white">
-          R
-        </div>
         <div className="min-w-0">
-          <span className="block text-lg font-bold tracking-tight text-primary">
-            Rentwise
-          </span>
+          <a className="brand" href="#top" aria-label="rentwise home">
+            <span className="brand-mark">r</span>
+            <span>RentWise</span>
+          </a>
           <span className="whitespace-nowrap text-[10px] font-medium tracking-wide">
             PROPERTY MANAGER
           </span>
@@ -62,6 +61,9 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
           <p className="text-xs text-primary-200 mb-0">Administrator</p>
         </div>
       </div>
+      <Nav>
+        <LogoutButton />
+      </Nav>
     </div>
   );
 }

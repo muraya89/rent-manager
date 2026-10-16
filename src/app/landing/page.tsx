@@ -84,7 +84,7 @@ function ProductScreen() {
       <div className="product-body">
         <aside className="product-sidebar">
           <div className="mini-brand">
-            <span className="brand-mark">r</span> rentwise
+            <span className="brand-mark">r</span> RentWise
           </div>
           <div className="side-label">WORKSPACE</div>
           <div className="side-item active">
@@ -238,14 +238,14 @@ export default function Page() {
         <nav className={`nav-wrap ${scrolled ? "nav-scrolled" : ""}`}>
           <a className="brand" href="#top" aria-label="rentwise home">
             <span className="brand-mark">r</span>
-            <span>rentwise</span>
+            <span>RentWise</span>
           </a>
           <div className={`nav-actions ${menuOpen ? "open" : ""}`}>
             <a href="#product" onClick={() => setMenuOpen(false)}>
               Product
             </a>
             <a href="#why" onClick={() => setMenuOpen(false)}>
-              Why rentwise
+              Why RentWise
             </a>
             <a href="#pricing" onClick={() => setMenuOpen(false)}>
               Pricing
@@ -460,7 +460,7 @@ export default function Page() {
         <footer>
           <a className="brand" href="#top">
             <span className="brand-mark">r</span>
-            <span>rentwise</span>
+            <span>RentWise</span>
           </a>
           <span>© 2026 rentwise, inc.</span>
           <div className="nav-actions">
