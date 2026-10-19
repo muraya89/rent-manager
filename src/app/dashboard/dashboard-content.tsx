@@ -8,6 +8,7 @@ import { DashboardHeader } from "./header";
 import { InsightsPanel } from "./reports/components/insights";
 import { StatsGrid } from "./reports/components/stats";
 import type { DashboardStat } from "@/app/Types/dashboard";
+import { useSession } from "next-auth/react";
 
 export default function DashboardContent({
   tenants,
@@ -21,6 +22,8 @@ export default function DashboardContent({
     expected: number;
   };
 }) {
+  const { data: session, status } = useSession();
+  const user = session?.user;
   const [query, setQuery] = useState("");
   const [notice, setNotice] = useState(false);
   const filteredTenants = useMemo(
@@ -32,13 +35,20 @@ export default function DashboardContent({
       ),
     [query, tenants],
   );
+  const getFN = (name?: string | null): string => {
+    if (!name?.trim()) return "";
+
+    return name
+      .trim()
+      .split(/\s+/)[0];
+  };
 
   return (
     <Container
       fluid
       className="mx-auto flex min-h-screen w-full max-w-none px-0"
     >
-      <section className="min-w-0 flex-1 py-4 lg:py-7">
+      <section className="min-w-0 flex-1">
         <DashboardHeader
           query={query}
           onQueryChange={setQuery}
@@ -64,14 +74,16 @@ export default function DashboardContent({
         )}
         <div className="mb-8">
           <p className="mb-1 text-sm font-medium text-slate-500">
-            Thursday, 20 August 2026
+            {new Date().toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Good morning, James <span aria-hidden="true">👋</span>
+            Good morning, {getFN(user?.name)}
           </h1>
-          <p className="mt-2 text-sm text-slate-500">
-            Here&apos;s what&apos;s happening with your properties today.
-          </p>
         </div>
         <StatsGrid stats={stats} />
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_330px]">

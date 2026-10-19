@@ -13,25 +13,35 @@ import {
 import { navigation } from "@/app/data/dashboard";
 import { Icon } from "./dashboard-icon";
 import LogoutButton from "@/app/auth/components/logoutButton";
+import { useSession } from "next-auth/react";
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
+  const { data: session, status } = useSession();
+  const user = session?.user;
   const pathname = usePathname();
+  const getInitials = (name?: string | null): string => {
+    if (!name?.trim()) return "";
+
+    return name
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0].toUpperCase())
+      .slice(0, 2)
+      .join("");
+  };
   return (
-    <div className="flex h-full min-w-0 flex-col px-4 py-5">
+    <div className="flex h-full min-w-0 w-full flex-col px-4 py-5  text-white">
       <div className="mb-7 flex items-center gap-3 px-3">
         <div className="min-w-0">
           <a className="brand" href="#top" aria-label="rentwise home">
             <span className="brand-mark">r</span>
-            <span>RentWise</span>
+            <span className="brand-text ">RentWise</span>
           </a>
-          <span className="whitespace-nowrap text-[10px] font-medium tracking-wide">
-            PROPERTY MANAGER
-          </span>
         </div>
       </div>
-      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[.16em] text-primary">
+      {/* <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[.16em] text-primary">
         Workspace
-      </p>
+      </p> */}
       <Nav vertical className="rentwise-nav space-y-1">
         {navigation.map((item) => (
           <NavItem key={item.label}>
@@ -52,13 +62,15 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       </Nav>
       <div className="mt-auto flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.06] px-3 py-2.5">
         <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-white text-xs font-bold shadow-md shadow-black/20">
-          JM
+          {getInitials(user?.name)}
         </div>
         <div className="min-w-0 py-3">
-          <p className="whitespace-nowrap text-sm font-semibold text-primary mb-0">
-            James Mwangi
+          <p className="whitespace-nowrap text-sm font-semibold mb-0">
+            {user?.name}
           </p>
-          <p className="text-xs text-primary-200 mb-0">Administrator</p>
+          <p className="text-xs text-primary-200 text-lowercase mb-0">
+            {user?.role}
+          </p>
         </div>
       </div>
       <Nav>

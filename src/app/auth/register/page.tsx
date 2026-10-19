@@ -66,82 +66,78 @@ export default function RegisterPage() {
     );
   };
 
-  
+  async function handleSubmit(values: typeof initialValues) {
+    setError("");
 
-async function handleSubmit(values: typeof initialValues) {
-  setError("");
+    if (values.password !== values.confirmPassword) {
+      setError("Your passwords do not match.");
+      return;
+    }
 
-  if (values.password !== values.confirmPassword) {
-    setError("Your passwords do not match.");
-    return;
-  }
+    if (values.password.length < 8) {
+      setError("Password must contain at least 8 characters.");
+      return;
+    }
 
-  if (values.password.length < 8) {
-    setError("Password must contain at least 8 characters.");
-    return;
-  }
+    setLoading(true);
 
-  setLoading(true);
+    try {
+      // Step 1: Create the account.
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          username: values.username.trim(),
+          email: values.email.trim(),
+          password: values.password,
+        }),
+      });
 
-  try {
-    // Step 1: Create the account.
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: values.name.trim(),
-        username: values.username.trim(),
-        email: values.email.trim(),
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setError(data.error || "We couldn't create your account.");
+        return;
+      }
+
+      // Step 2: Sign in using the newly created account.
+      const loginResult = await signIn("credentials", {
+        identifier: values.username.trim(),
         password: values.password,
-      }),
-    });
+        redirect: false,
+      });
 
-    const data = await response.json().catch(() => ({}));
+      // The account exists even if automatic login fails.
+      if (!loginResult || loginResult.error || !loginResult.ok) {
+        router.push("/login?registered=1");
+        return;
+      }
 
-    if (!response.ok) {
-      setError(data.error || "We couldn't create your account.");
-      return;
+      // Step 3: Redirect after successful authentication.
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next");
+
+      // Avoid redirecting to an external or protocol-relative URL.
+      const safeNext =
+        next && next.startsWith("/") && !next.startsWith("//")
+          ? next
+          : "/dashboard";
+
+      router.push(safeNext);
+      router.refresh();
+    } catch (error) {
+      console.error("Signup error:", error);
+      setError("Unable to connect to the server. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    // Step 2: Sign in using the newly created account.
-    const loginResult = await signIn("credentials", {
-      identifier: values.username.trim(),
-      password: values.password,
-      redirect: false,
-    });
-
-    // The account exists even if automatic login fails.
-    if (!loginResult || loginResult.error || !loginResult.ok) {
-      router.push("/login?registered=1");
-      return;
-    }
-
-    // Step 3: Redirect after successful authentication.
-    const params = new URLSearchParams(window.location.search);
-    const next = params.get("next");
-
-    // Avoid redirecting to an external or protocol-relative URL.
-    const safeNext =
-      next && next.startsWith("/") && !next.startsWith("//")
-        ? next
-        : "/dashboard";
-
-    router.push(safeNext);
-    router.refresh();
-  } catch (error) {
-    console.error("Signup error:", error);
-    setError("Unable to connect to the server. Please try again.");
-  } finally {
-    setLoading(false);
   }
-}
-
-
 
   return (
-    <main className="min-h-screen bg-(--background) text-(--foreground) w-100">
+    <main className="min-h-screen bg-(--background) text-(--main-text) w-100">
       <div className="grid min-h-screen lg:grid-cols-2">
         {/* Left: Signup form */}
         <section className="flex items-center justify-center px-5 py-8 sm:px-8 lg:px-12">

@@ -23,19 +23,16 @@ export function DashboardHeader({
         <Icon name="grid" size={19} />
       </Button>
       <InputGroup className="hidden max-w-sm rounded-xl shadow-sm sm:flex">
-        <InputGroupText className="border-slate-200 bg-white text-slate-400">
-          <Icon name="search" size={18} />
-        </InputGroupText>
         <Input
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
-          className="border-slate-200 border-l-0 py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-200 focus:shadow-none"
+          className="py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-200 focus:shadow-none"
           placeholder="Search tenants, properties..."
         />
       </InputGroup>
       <div className="ml-auto flex items-center gap-2 sm:gap-3">
         <button
-          className="relative grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm"
+          className="relative grid h-10 w-10 place-items-center rounded-full bg-white text-slate-600 shadow-sm" 
           aria-label="Notifications"
         >
           <Icon name="bell" size={19} />

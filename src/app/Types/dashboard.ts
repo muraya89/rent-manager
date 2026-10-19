@@ -15,6 +15,8 @@ export type DashboardStat = {
   value: string;
   detail: string;
   accent: string;
+  total: number;
+  amount: number;
   icon: "building" | "people" | "receipt" | "chart";
 };
 

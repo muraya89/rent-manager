@@ -24,8 +24,7 @@ export default function LogoutButton() {
       type="button"
       onClick={handleLogout}
       disabled={loading}
-      className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition hover:text-red-600 disabled:opacity-60"
-      style={{ color: "var(--foreground)" }}
+      className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition  disabled:opacity-60"
     >
       <span aria-hidden="true">↪</span>
       {loading ? "Signing out..." : "Logout"}

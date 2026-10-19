@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge, Card, CardBody, CardHeader, Table } from "reactstrap";
 import { Icon } from "./dashboard-icon";
+import { formatMoney as money } from "@/lib/helpers/helper";
 
 function PaymentStatus({ status }: { status: string }) {
   const color =
@@ -29,27 +30,27 @@ export function ActivityTable({
   query: string;
 }) {
   return (
-    <Card className="rounded-2xl border-slate-200 shadow-sm">
-      <CardHeader className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-white py-3">
+    <Card className="rounded-2xl">
+      <CardHeader className="flex flex-wrap items-center justify-between gap-3 border-0 bg-white py-3">
         <div>
-          <h2 className="font-bold">Recent rent activity</h2>
-          <p className="mt-1 text-xs text-slate-500">
-            Track the latest tenant payments.
+          <span className="font-bold text-xl">Recent rent activity</span>
+          <p className="text-xs text-slate-500">
+            Latest tenant payments.
           </p>
         </div>
-        <Link href="/dashboard/payments" className="text-sm font-semibold text-[#4437d8]">
-          View all payments
+        <Link href="/dashboard/payments" className="text-sm font-semibold text-(--primary)!">
+          View all
         </Link>
       </CardHeader>
       <CardBody className="overflow-x-auto py-0">
-        <Table responsive className="mb-0 min-w-[610px] text-left">
-          <thead className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <Table responsive className="mb-0 min-w-152.5 text-left">
+          <thead className="text-[11px] uppercase tracking-wider text-slate-400">
             <tr>
               <th className="px-6 py-3.5">Tenant</th>
               <th className="px-4 py-3.5">Property</th>
               <th className="px-4 py-3.5">Amount</th>
               <th className="px-4 py-3.5">Status</th>
-              <th className="px-6 py-3.5" />
+              {/* <th className="px-6 py-3.5" /> */}
             </tr>
           </thead>
           <tbody>
@@ -61,12 +62,12 @@ export function ActivityTable({
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`grid h-9 w-9 place-items-center rounded-full text-xs font-bold ${tenant.color}`}
+                      className={`grid h-9 w-9 place-items-center rounded-full text-xs font-bold text-(--primary) bg-(--primary-light)`}
                     >
                       {tenant.initials}
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-700 mb-0">
+                      <p className="font-bold text-slate-700 mb-0">
                         {tenant.name}
                       </p>
                       <p className="text-xs text-slate-400 mb-0">{tenant.unit}</p>
@@ -75,16 +76,16 @@ export function ActivityTable({
                 </td>
                 <td className="px-4 py-4 text-slate-500">{tenant.property}</td>
                 <td className="px-4 py-4 font-semibold text-slate-700">
-                  {tenant.amount}
+                  {money(tenant.amount)}
                 </td>
                 <td className="px-4 py-4">
                   <PaymentStatus status={tenant.status} />
                 </td>
-                <td className="px-6 py-4 text-right text-slate-400">
+                {/* <td className="px-6 py-4 text-right text-slate-400">
                   <button aria-label={`More actions for ${tenant.name}`}>
                     <Icon name="dots" size={19} />
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

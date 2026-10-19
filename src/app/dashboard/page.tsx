@@ -27,6 +27,11 @@ export default async function DashboardPage() {
     collectedRent,
   ] = await Promise.all([
     prisma.tenant.findMany({
+      take: 5,
+      orderBy: {
+        createdAt: "desc",
+      },
+
       select: {
         name: true,
         id: true,
@@ -99,7 +104,6 @@ export default async function DashboardPage() {
         .join("")
         .slice(0, 2)
         .toUpperCase(),
-      color: "bg-sky-100 text-sky-700",
     };
   });
 
@@ -121,11 +125,20 @@ export default async function DashboardPage() {
 
   const stats = [
     {
-      label: "Total properties",
-      value: propertyCount.toString(),
-      detail: `${unitCount} total units`,
-      accent: "bg-violet-500",
-      icon: "building" as const,
+      label: "Collected this month",
+      amount: collectedRentAmount,
+      // value: money(expectedRentAmount),
+      detail: `${money(collectedRentAmount)} collected`,
+      total: expectedRentAmount,
+      accent: "bg-sky-500",
+      icon: "receipt" as const,
+    },
+    {
+      label: "Outstanding rent",
+      value: money(outstandingRentAmount),
+      detail: "Unpaid and overdue charges",
+      accent: "bg-amber-500",
+      icon: "chart" as const,
     },
     {
       label: "Occupancy rate",
@@ -135,18 +148,11 @@ export default async function DashboardPage() {
       icon: "people" as const,
     },
     {
-      label: "Expected this month",
-      value: money(expectedRentAmount),
-      detail: `${money(collectedRentAmount)} collected`,
-      accent: "bg-sky-500",
-      icon: "receipt" as const,
-    },
-    {
-      label: "Outstanding rent",
-      value: money(outstandingRentAmount),
-      detail: "Across unpaid and overdue charges",
-      accent: "bg-amber-500",
-      icon: "chart" as const,
+      label: "properties",
+      value: propertyCount.toString(),
+      detail: `${unitCount} total units`,
+      accent: "bg-violet-500",
+      icon: "building" as const,
     },
   ];
 

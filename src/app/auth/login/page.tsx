@@ -63,7 +63,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] w-100">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--main-text)] w-100">
       <div className="grid min-h-screen lg:grid-cols-2">
         {/* Left: Login form */}
         <section className="flex items-center justify-center px-5 py-10 sm:px-8 lg:px-12">

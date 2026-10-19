@@ -5,20 +5,63 @@
 ========================= */
 
 :root {
-  --background: #f7f8fc;
-  --foreground: #2b313c;
-  /* --primary: #387ffb; */
-  --primary: #4b1d29;
-  --primary-hover: #e1f5fe;
-  --primary-active: #2660a4;
-  /* --secondary: #3e7cb1; */
-  --secondary: #f35b35;
-  --success: #198754;
-  --info: #0dcaf0;
-  --warning: #ffc107;
-  --danger: #dc3545;
-  --light: #f8f9fa;
-  --dark: #212529;
+  /* Backgrounds */
+  --background: #f8f6f4;
+  --surface: #ffffff;
+  --surface-secondary: #f2eeec;
+  --surface-hover: #f6ecef;
+
+  /* Text */
+  --main-text: #29232a;
+  --secondary-text: #6f6872;
+  --muted-text: #96909a;
+
+  /* Brand */
+  --primary: #511d2b;
+  --primary-hover: #74394a;
+  --primary-active: #3d1420;
+  --primary-light: #f0e2e6;
+  --primary-border: #d9bac3;
+
+  /* Secondary accent */
+  --secondary: #a66a79;
+  --secondary-hover: #8f5262;
+
+  /* Borders and shadows */
+  --border: #e7e1de;
+  --border-strong: #d5ccca;
+  --shadow-sm: 0 2px 8px rgba(41, 35, 42, 0.04);
+  --shadow-md: 0 8px 24px rgba(41, 35, 42, 0.08);
+
+  /* Semantic colors */
+  --success: #247a52;
+  --success-light: #e8f4ec;
+
+  --info: #356a91;
+  --info-light: #eaf2f8;
+
+  --warning: #996515;
+  --warning-light: #fbf1d9;
+
+  --danger: #b42335;
+  --danger-light: #fbeaec;
+
+  /* Neutral colors */
+  --light: #f8f6f4;
+  --dark: #29232a;
+
+  /* Layout */
+  --sidebar-bg: lab(7.78673% 1.82346 -15.0537);
+  /* --sidebar-bg: #211a20; */
+  --sidebar-text: var(--color-slate-400);
+  /* --sidebar-text: #d5cdd3; */
+  --sidebar-hover: #35262f;
+  --sidebar-active: #511d2b;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
 }
 
 /* Tailwind v4 custom utilities */
@@ -34,7 +77,7 @@
 body {
   margin: 0;
   background: var(--background);
-  color: var(--foreground);
+  color: var(--main-text);
   font-family: var(--font-inter), sans-serif;
 }
 
@@ -103,6 +146,10 @@ button {
   --bs-table-border-color: #edf0f5;
 }
 
+.table thead tr th{
+  color: var(--muted-text)
+}
+
 .table > :not(caption) > * > * {
   box-shadow: none;
 }
@@ -152,17 +199,20 @@ button {
 }
 
 .text-secondary {
-  color: #526173 !important;
+  color: var(--secondary) !important;
 }
 
 .chip--color {
   background-color: rgba(128, 128, 128, 0.459) !important;
 }
 
+.tertiary{
+  background-color: #FADCDC;
+}
 /* .text-base {
   font-size: 2rem;
   line-height: 1.5rem;
-  color: var(--foreground);
+  color: var(--main-text);
 } */
 
 /* =========================
@@ -170,8 +220,7 @@ button {
 ========================= */
 
 .rentwise-sidebar {
-  background: white;
-  box-shadow: 16px 0 40px rgba(34, 27, 79, 0.08);
+  background: var(--sidebar-bg);
 }
 
 .rentwise-sidebar::-webkit-scrollbar {
@@ -183,13 +232,8 @@ button {
   border-radius: 999px;
 }
 
-.rentwise-mark {
-  background: var(--primary);
-  box-shadow: 0 10px 24px rgba(110, 97, 245, 0.38);
-}
-
 .rentwise-nav .nav-link {
-  color: #000000c8;
+  color: var(--sidebar-text);
   position: relative;
   display: flex !important;
   align-items: center;
@@ -200,16 +244,17 @@ button {
   flex: 0 0 auto;
 }
 
-.rentwise-nav .nav-link:hover {
-  color: var(--primary);
-  background: white;
+.rentwise-nav .nav-link:focus-visible {
+  outline: 2px solid #e9b7c7;
+  outline-offset: 2px;
 }
 
 .rentwise-nav .nav-link.is-active,
 .rentwise-nav .nav-link.active {
-  color: var(--primary);
-  background: #2661a413;
-  box-shadow: inset 3px 0 #b7b0ff;
+  color: #ffffff;
+  background: var(--sidebar-active);
+  font-weight: 600;
+  transform: none;
 }
 
 .rentwise-help {
@@ -265,25 +310,30 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.04em;
-  color: var(--foreground);
+  color: var(--main-text);
   text-decoration: none;
 }
 
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 25px;
-  height: 25px;
+  width: 55px;
+  height: 55px;
   border-radius: 50% 50% 50% 8%;
   background: #4b1d29;
   color: #f4eee6;
-  font-size: 18px;
+  font-size: 33px;
   font-weight: 800;
   font-family: Georgia, serif;
   font-style: italic;
+}
+.brand-text {
+  color: #ffffff;
+  font-size: 25px;
+  letter-spacing: 3px;
 }
 
 .nav-links,
@@ -300,12 +350,12 @@ button {
 
 .nav-actions > a {
   padding: 14px;
-  color: var(--foreground);
+  color: var(--main-text);
   text-decoration: none;
 }
 
 .login {
-  color: var(--foreground);
+  color: var(--main-text);
 }
 
 .nav-cta {
@@ -407,7 +457,7 @@ button {
   color: white;
   font-size: 14px;
   font-weight: 700;
-  text-decoration: none ;
+  text-decoration: none;
   box-shadow: 0 8px 22px rgba(18, 77, 62, 0.16);
 }
 
@@ -1581,7 +1631,7 @@ footer div {
   .nav-actions > a {
     padding: 14px;
     border-bottom: 1px solid #edf0eb;
-    color: var(--foreground);
+    color: var(--main-text);
     text-decoration: none;
   }
 
@@ -1597,7 +1647,7 @@ footer div {
   }
 
   .mobile-actions .login {
-    color: var(--foreground);
+    color: var(--main-text);
     text-decoration: none;
   }
 
@@ -1797,4 +1847,28 @@ footer div {
   * {
     @apply border-border outline-ring/50;
   }
+}
+
+.progress {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--secondary);
+}
+.progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sidebar-text);
+  transition: width 0.3s ease;
+}
+.progress-bar.complete {
+  background: #16a34a;
+}
+.fulfillment-stats {
+  margin-top: 5px;
+}
+
+hr{
+  color: rgb(188, 188, 189)
 }
