@@ -23,6 +23,8 @@ import {
 import { addLease, endLease } from "@/lib/actions/leaseActions";
 import { Formik, Form, Field } from "formik";
 import { useRouter } from "next/navigation";
+import { StatsGrid } from "@/app/dashboard/reports/components/stats";
+import { formatMoney as money } from "@/lib/helpers/helper";
 
 interface TenantOption {
   id: number;
@@ -40,7 +42,6 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [terminateLeaseDialog, setTerminateLeaseDialog] = useState(false);
   const [createLeaseDialog, setCreateLeaseDialog] = useState(false);
-
   if (!unit) {
     return (
       <div className="py-5 text-center">
@@ -60,12 +61,9 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
       </div>
     );
   }
-
   const currentLease = unit.leases.find((lease) => lease.status === "ACTIVE");
-
   const currentTenant = currentLease?.tenant;
   const rentCharges = currentLease?.rentCharges ?? [];
-
   const totalPaid = rentCharges.reduce(
     (total, charge) =>
       total +
@@ -75,18 +73,13 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
       ),
     0,
   );
-
   const totalCharges = rentCharges.reduce(
     (total, charge) => total + Number(charge.amount),
     0,
   );
-
   const outstanding = Math.max(totalCharges - totalPaid, 0);
-
   const occupancyStatus = unit.isOccupied ? "Occupied" : "Vacant";
-
-  const formattedRent = Number(unit.monthlyRent).toLocaleString();
-
+  const formattedRent = unit.monthlyRent;
   const leaseEndDate = currentLease?.endDate
     ? formatDate(currentLease.endDate)
     : "Open ended";
@@ -113,12 +106,10 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
       label: "History",
     },
   ];
-
   const terminateInitialValues = {
     endDate: new Date().toISOString().split("T")[0],
     terminationReason: "",
   };
-
   const creationInitialValues = {
     startDate: new Date().toISOString().split("T")[0],
     endDate: "",
@@ -126,116 +117,90 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
     monthlyRent: Number(unit.monthlyRent),
     unitId: unit.id,
   };
-
   const toggleTerminateLeaseDialog = () =>
     setTerminateLeaseDialog(!terminateLeaseDialog);
 
   const toggleCreateLeaseDialog = () =>
     setCreateLeaseDialog(!createLeaseDialog);
 
+  const stats = [
+    {
+      label: "Monthly rent",
+      value: money(formattedRent),
+      className: "",
+    },
+    {
+      label: "Tenant",
+      value: currentTenant?.name ?? "Vacant",
+      className: "",
+    },
+    {
+      label: "Lease end",
+      value: leaseEndDate,
+      className: "",
+    },
+    {
+      label: "Outstanding",
+      value: money(outstanding),
+      className: outstanding > 0 ? "text-danger bg-[#fadcdc]" : "text-success",
+    },
+  ];
+
   return (
     <div className="mt-4 px-4 pb-5">
       {/* Back */}
-      <button
+      {/* <button
         type="button"
         onClick={() => router.push("/dashboard/properties")}
         className="mb-4 flex items-center gap-2 border-0 bg-transparent p-0 text-sm text-gray-500 transition hover:text-gray-900"
       >
         <span>←</span>
         <span>Back to properties</span>
-      </button>
+      </button> */}
 
       {/* Unit Header */}
       <Card className="mb-4 overflow-hidden border-0 shadow-sm">
         <CardBody className="p-0">
-          <div className="p-5">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <div className="mb-2 flex items-center gap-3">
-                  <h2 className="mb-0 text-2xl font-semibold text-gray-900">
-                    Unit {unit.unitNumber}
-                  </h2>
+          <div className="p-5 bg-primary flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <div className="mb-2 flex items-center gap-3">
+                <span className="mb-0 text-4xl font-semibold text-white">
+                  Unit {unit.unitNumber}
+                </span>
 
-                  <StatusBadge
-                    status={unit.isOccupied ? "OCCUPIED" : "VACANT"}
-                  />
-                </div>
-
-                <p className="mb-1 text-sm text-gray-500">
-                  Unit details and tenancy information
-                </p>
-
-                {currentTenant ? (
-                  <p className="mb-0 text-sm text-gray-700">
-                    Current tenant:{" "}
-                    <span className="font-semibold">{currentTenant.name}</span>
-                  </p>
-                ) : (
-                  <p className="mb-0 text-sm text-gray-500">
-                    No tenant currently assigned
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3">
-                {currentLease && (
-                  <Button
-                    color="primary"
-                    className="rounded-lg px-4"
-                    onClick={() => setActiveTab("payments")}
-                  >
-                    Record Payment
-                  </Button>
-                )}
-
-                {!currentLease && (
-                  <Button
-                    color="success"
-                    className="rounded-lg px-4"
-                    onClick={toggleCreateLeaseDialog}
-                  >
-                    Add Lease
-                  </Button>
-                )}
+                <StatusBadge status={unit.isOccupied ? "OCCUPIED" : "VACANT"} />
               </div>
             </div>
-          </div>
 
-          {/* Header stats */}
-          <div className="border-top bg-gray-50 px-5 py-4">
-            <Row className="g-4">
-              <Col xs="6" md="3">
-                <HeaderStat
-                  label="Monthly Rent"
-                  value={`KES ${formattedRent}`}
-                />
-              </Col>
+            <div className="flex flex-wrap items-center gap-3">
+              {currentLease && (
+                <Button
+                  className="rounded-lg px-4 bg-white text-primary"
+                  onClick={() => setActiveTab("payments")}
+                >
+                  + Record Payment
+                </Button>
+              )}
 
-              <Col xs="6" md="3">
-                <HeaderStat
-                  label="Tenant"
-                  value={currentTenant?.name ?? "Vacant"}
-                />
-              </Col>
-
-              <Col xs="6" md="3">
-                <HeaderStat label="Lease Ends" value={leaseEndDate} />
-              </Col>
-
-              <Col xs="6" md="3">
-                <HeaderStat
-                  label="Outstanding"
-                  value={`KES ${outstanding.toLocaleString()}`}
-                  valueClass={outstanding > 0 ? "text-danger" : "text-success"}
-                />
-              </Col>
-            </Row>
+              {!currentLease && (
+                <Button
+                  color="success"
+                  className="rounded-lg px-4"
+                  onClick={toggleCreateLeaseDialog}
+                >
+                  Add Lease
+                </Button>
+              )}
+            </div>
           </div>
         </CardBody>
       </Card>
 
+      {/* Header stats */}
+      <StatsGrid stats={stats} />
+
       {/* Tabs */}
-      <div className="mb-4 rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="mb-4 -mt-4">
         <Nav tabs className="border-0 px-2 pt-2">
           {tabs.map((tab) => (
             <NavItem key={tab.id}>
@@ -246,16 +211,16 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
                   e.preventDefault();
                   setActiveTab(tab.id);
                 }}
-                className={`cursor-pointer rounded-t-lg border-0 px-4 py-3 text-sm font-medium transition ${
+                className={`cursor-pointer rounded-t-lg border-0 px-4 py-3 text-sm font-medium transition  ${
                   activeTab === tab.id
-                    ? "border-b-2 border-primary bg-white text-primary"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-800"
+                    ? "bg-sidebar !rounded-4xl text-white"
+                    : "!text-gray-500 !hover:bg-gray-50 !hover:text-gray-800"
                 }`}
               >
                 {tab.label}
 
                 {tab.id === "payments" && currentLease && (
-                  <span className="ms-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
+                  <span className="ms-2 rounded-full bg-gray-100 px-1.5 py-1 text-xs text-gray-500">
                     {rentCharges.length}
                   </span>
                 )}
@@ -272,29 +237,6 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
 
         <TabPane tabId="overview">
           <div className="space-y-4">
-            <Row className="g-4">
-              <Col md="4">
-                <InfoCard label="Unit" value={unit.unitNumber} icon="▦" />
-              </Col>
-
-              <Col md="4">
-                <InfoCard
-                  label="Monthly Rent"
-                  value={`KES ${formattedRent}`}
-                  icon="K"
-                />
-              </Col>
-
-              <Col md="4">
-                <InfoCard
-                  label="Occupancy"
-                  value={unit.isOccupied ? "Occupied" : "Vacant"}
-                  icon={unit.isOccupied ? "✓" : "○"}
-                  valueClass={unit.isOccupied ? "text-success" : "text-warning"}
-                />
-              </Col>
-            </Row>
-
             <Card className="border-0 shadow-sm">
               <CardBody className="p-5">
                 <div className="mb-4">

@@ -6,7 +6,7 @@
 
 :root {
   /* Backgrounds */
-  --background: #f8f6f4;
+  --background: #f7f8fc;
   --surface: #ffffff;
   --surface-secondary: #f2eeec;
   --surface-hover: #f6ecef;
@@ -146,8 +146,8 @@ button {
   --bs-table-border-color: #edf0f5;
 }
 
-.table thead tr th{
-  color: var(--muted-text)
+.table thead tr th {
+  color: var(--muted-text);
 }
 
 .table > :not(caption) > * > * {
@@ -166,16 +166,6 @@ button {
   letter-spacing: 0.01em;
 }
 
-.progress {
-  --bs-progress-bg: rgba(235, 234, 234, 0.959);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progress-bar {
-  border-radius: 999px;
-}
-
 .list-group-item {
   --bs-list-group-border-color: #f0f2f6;
 }
@@ -186,10 +176,6 @@ button {
   --bs-alert-border-color: #d9ddff;
 }
 
-.text-primary {
-  color: var(--primary) !important;
-}
-
 .bg-primary {
   background-color: var(--primary) !important;
 }
@@ -198,16 +184,30 @@ button {
   background-color: var(--primary-hover) !important;
 }
 
+.bg-sidebar{
+  background-color: var(--sidebar-bg) !important;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
 .text-secondary {
-  color: var(--secondary) !important;
+  color: var(--secondary-text) !important;
+}
+
+.text-muted {
+  color: var(--muted-text);
+  font-size: 13px;
+  font-weight: 100;
 }
 
 .chip--color {
   background-color: rgba(128, 128, 128, 0.459) !important;
 }
 
-.tertiary{
-  background-color: #FADCDC;
+.tertiary {
+  background-color: #fadcdc;
 }
 /* .text-base {
   font-size: 2rem;
@@ -359,7 +359,7 @@ button {
 }
 
 .nav-cta {
-  background: var(--secondary);
+  background: #f35b35;
   color: #fff !important;
   padding: 11px 16px;
   border-radius: 8px;
@@ -1856,19 +1856,105 @@ footer div {
   overflow: hidden;
   background: var(--secondary);
 }
+
 .progress-bar {
   height: 100%;
   border-radius: inherit;
-  background: var(--sidebar-text);
+  background: white;
   transition: width 0.3s ease;
 }
+
 .progress-bar.complete {
   background: #16a34a;
 }
+
 .fulfillment-stats {
   margin-top: 5px;
 }
 
-hr{
-  color: rgb(188, 188, 189)
+.p--progress {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--primary-light);
+}
+.p--progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary-hover);
+  transition: width 0.3s ease;
+}
+
+hr {
+  color: rgb(188, 188, 189);
+}
+
+.occupied-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid #e2e6f0;
+  border-radius: 14px;
+  background: var(--background);
+
+   /* Remove Bootstrap's default left offset for switches */
+  .form-check {
+    padding-left: 0;
+    min-height: 0;
+    margin: 0;
+  }
+
+  .form-check-input {
+    float: none;
+    margin: 0;
+    width: 2.9rem;
+    height: 30px;
+    cursor: pointer;
+    border-color: #cbd2e0;
+    background-color: #cbd2e0;
+
+     /* Keep the knob white and neutral when focused but off */
+    &:focus:not(:checked) {
+      border-color: #cbd2e0;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+    }
+
+    &:checked {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(81, 29, 43, 0.2);
+    }
+  }
+
+  &__text {
+    flex: 1;
+    margin: 0;
+    cursor: pointer;
+    color: var(--main-text);
+
+    strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    span {
+      display: block;
+      font-size: 0.8125rem;
+      color: var(--secondary-text);
+    }
+
+     /* Makes the whole row clickable */
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+  }
 }

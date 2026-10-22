@@ -38,9 +38,7 @@ export default function DashboardContent({
   const getFN = (name?: string | null): string => {
     if (!name?.trim()) return "";
 
-    return name
-      .trim()
-      .split(/\s+/)[0];
+    return name.trim().split(/\s+/)[0];
   };
 
   return (
@@ -55,6 +53,7 @@ export default function DashboardContent({
           onAddTenant={() => setNotice(true)}
           onOpenMenu={() => undefined}
         />
+
         {notice && (
           <Alert
             color="primary"
@@ -72,6 +71,7 @@ export default function DashboardContent({
             </Button>
           </Alert>
         )}
+
         <div className="mb-8">
           <p className="mb-1 text-sm font-medium text-slate-500">
             {new Date().toLocaleDateString("en-US", {
@@ -81,11 +81,14 @@ export default function DashboardContent({
               day: "numeric",
             })}
           </p>
+
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Good morning, {getFN(user?.name)}
           </h1>
         </div>
+
         <StatsGrid stats={stats} />
+
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_330px]">
           <ActivityTable tenants={filteredTenants} query={query} />
           <InsightsPanel collection={collection} />

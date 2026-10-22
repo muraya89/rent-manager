@@ -15,14 +15,14 @@ export default function SectionPage({
   return (
     <>
       <CardBody className="p-0">
-        <div className="px-4">
+        <div className="px-4 flex flex-col">
           {/* <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-[.14em] text-indigo-100">
             Rentwise workspace
           </span> */}
-          <h4 className="font-bold tracking-tight sm:text-4xl">
+          <span className="font-bold sm:text-4xl">
             {title}
-          </h4>
-          <span className="max-w-xl text-sm leading-6 sm:text-base">
+          </span>
+          <span className="max-w-xl leading-6 sm:text-base text-muted">
             {description}
           </span>
         </div>

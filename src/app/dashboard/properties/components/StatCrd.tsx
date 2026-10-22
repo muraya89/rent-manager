@@ -11,13 +11,15 @@ export default function StatCard({
   secondary?: string;
 }) {
   return (
-    <Card className="border-0 shadow-sm h-100">
+    <Card className="border-0 h-100">
       <CardBody className="p-4">
         <div className="d-flex justify-content-between align-items-start">
           <div>
-            <div className="text-muted small mb-2">{label}</div>
+            <div className="font-bold mb-2 text-xs text-[#6B5F66] text-uppercase">
+              {label}
+            </div>
 
-            <div className="fs-3 fw-semibold">{value}</div>
+            <div className="fw-bolder text-3xl">{value}</div>
 
             {secondary && (
               <div className="small text-muted mt-1">{secondary}</div>

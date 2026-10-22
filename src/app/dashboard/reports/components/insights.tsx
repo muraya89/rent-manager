@@ -67,7 +67,7 @@ export function InsightsPanel({
         </CardBody>
       </Card> */}
 
-      <Card className="rounded-2xl">
+      <Card className="rounded-2xl border-0">
         <CardBody className="p-6">
           <div className="flex items-center justify-between">
             <div>

@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { Form, Formik, Field } from "formik";
 import { createUnit } from "@/lib/actions/unitActions";
-import { UnitFormValues } from "@/app/Types/unit";
+import { UnitFormValues, OccupiedSwitchProps } from "@/app/Types/unit";
 import TenantForm from "@/app/dashboard/tenants/components/TenantForm";
 
 interface AddUnitFormProps {
@@ -19,15 +19,45 @@ interface AddUnitFormProps {
   propertyName: string;
 }
 
+export function OccupiedSwitch({
+  id = "isOccupied",
+  checked,
+  onChange,
+  title = "This unit is occupied",
+  description = "Turn on to add the tenant and lease now. You can also do this later.",
+}: OccupiedSwitchProps) {
+  return (
+    <div className="occupied-switch">
+      <FormGroup switch className="m-0">
+        <Input
+          id={id}
+          type="switch"
+          role="switch"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+      </FormGroup>
+
+      <Label for={id} className="d-flex flex-col">
+        <strong>{title}</strong>
+        <span>{description}</span>
+      </Label>
+    </div>
+  );
+}
+
 export default function addUnitForm({
   propertyId,
   propertyName,
 }: AddUnitFormProps) {
+  const emptyTenant = { name: "", email: "", phone: "" };
+  const emptyLease = { startDate: "", monthlyRent: 0, endDate: "" };
   const initialValues: UnitFormValues = {
     unitNumber: "",
     monthlyRent: 0,
-    isOccupied: false,
-
+    isOccupied: true,
+    tenant: emptyTenant,
+    lease: emptyLease,
     name: "",
     email: "",
     phone: "",
@@ -56,65 +86,79 @@ export default function addUnitForm({
 
       <hr />
 
-      <Card className="border border-gray-200 rounded-lg bg-white">
-        <div className="bg-secondary px-4 py-5 sm:px-10 sm:py-12 rounded-t-lg">
-          <h3 className="tracking-tight sm:text-4xl">
+      <Card className="rounded-lg mb-4">
+        <div className="bg-secondary px-4 py-5 sm:px-10 sm:py-12 rounded-lg">
+          <h3 className="tracking-tight sm:text-4xl text-white">
             Add Unit to {propertyName}
           </h3>
         </div>
-        <div className="px-4 py-6">
-          <h5 className="text-2xl font-semibold mb-4">Unit Details</h5>
+      </Card>
 
-          <hr />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={(values) =>
+          createUnit(propertyId, {
+            ...values,
+            monthlyRent: Number(values.monthlyRent),
+          })
+        }
+      >
+        {({ values, setFieldValue }) => (
+          <Form className="mt-4">
+            <Card className="px-4 py-6 mb-4">
+              <span className="text-2xl font-bold mb-2">Unit Details</span>
 
-          <Formik
-            initialValues={initialValues}
-            onSubmit={(values) =>
-              createUnit(propertyId, {
-                ...values,
-                monthlyRent: Number(values.monthlyRent),
-              })
-            }
-          >{({ values, setFieldValue }) => (
-            <Form className="mt-4">
-              <FormGroup>
-                <Label for="unitNumber">Unit Number</Label>
-                <Field
-                  id="unitNumber"
-                  component={PlainInput}
-                  name="unitNumber"
-                  type="text"
-                  required
-                  placeholder="e.g., A101, B205"
-                ></Field>
-              </FormGroup>
+              <div className="d-flex justify-between gap-4">
+                <FormGroup className="w-full">
+                  <Label for="unitNumber" className="font-semibold">
+                    Unit Number
+                  </Label>
+                  <Field
+                    id="unitNumber"
+                    component={PlainInput}
+                    name="unitNumber"
+                    type="text"
+                    required
+                    placeholder="e.g., A101, B205"
+                  ></Field>
+                </FormGroup>
 
-              <FormGroup>
-                <Label for="monthlyRent">Monthly Rent</Label>
-                <Field
-                  id="monthlyRent"
-                  component={PlainInput}
-                  name="monthlyRent"
-                  placeholder="e.g., 15000"
-                  type="number"
-                  required
-                ></Field>
-              </FormGroup>
+                <FormGroup className="w-full">
+                  <Label for="monthlyRent" className="font-semibold">
+                    Monthly Rent
+                  </Label>
+                  <Field
+                    id="monthlyRent"
+                    component={PlainInput}
+                    name="monthlyRent"
+                    placeholder="e.g., 15000"
+                    type="number"
+                    required
+                  ></Field>
+                </FormGroup>
+              </div>
 
-              <FormGroup switch>
-                <Input
-                  type="switch"
-                  checked={values.isOccupied}
-                  onChange={(e) =>
-                    setFieldValue("isOccupied", e.target.checked)
+              <OccupiedSwitch
+                checked={values.isOccupied}
+                onChange={(checked) => {
+                  setFieldValue("isOccupied", checked);
+                  if (!checked) {
+                    // clear stale tenant data when switched off
+                    setFieldValue("tenant", emptyTenant);
+                    setFieldValue("lease", emptyLease);
                   }
-                />
+                }}
+              />
+            </Card>
 
-                <Label check>Is Occupied</Label>
-              </FormGroup>
+            <div>
+              {values.isOccupied && <TenantForm className="px-4" />}
 
-              {values.isOccupied && <TenantForm /> }
-
+              {/* =========================================================
+              
+                 BUTTONS
+              
+              ========================================================= */}
               <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
                 <Link href={`/dashboard/properties/${propertyId}`}>
                   <button
@@ -124,6 +168,7 @@ export default function addUnitForm({
                     Cancel
                   </button>
                 </Link>
+
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -131,11 +176,10 @@ export default function addUnitForm({
                   Save Unit
                 </button>
               </div>
-            </Form>
-          )}
-          </Formik>
-        </div>
-      </Card>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }

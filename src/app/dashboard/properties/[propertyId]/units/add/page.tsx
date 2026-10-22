@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import AddUnitForm from "./unitForm";
+import type { Metadata } from "next";
 
+
+export const metadata: Metadata = {
+  title: "Add Property Unit",
+  description: "Create a unit",
+};
 export default async function AddUnitPage({
   params,
 }: {

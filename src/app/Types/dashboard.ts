@@ -12,12 +12,13 @@ export type TenantActivity = {
 
 export type DashboardStat = {
   label: string;
-  value: string;
-  detail: string;
-  accent: string;
-  total: number;
-  amount: number;
-  icon: "building" | "people" | "receipt" | "chart";
+  value?: string;
+  detail?: string;
+  total?: number;
+  amount?: number;
+  className?: string;
+  progress?: boolean;
+  icon?: "building" | "people" | "receipt" | "chart";
 };
 
 export type CollectionProgress = {

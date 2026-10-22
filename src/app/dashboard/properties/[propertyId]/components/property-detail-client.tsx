@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Card,
-  CardTitle,
-  CardBody,
-  Button,
-  Table,
-} from "reactstrap";
+import { Card, CardTitle, CardBody, Button, Table } from "reactstrap";
 import CustomBadge from "@/app/shared-components/custom-badge";
 import Alert from "@/app/shared-components/alert";
 
@@ -48,32 +42,32 @@ export default function PropertyDetailClient({
     <>
       {/* Property Information Card */}
       <Card className="border-0 mb-4">
-        <div className="bg-secondary px-4 py-5 sm:px-10 sm:py-12 rounded-t-lg">
-          <h3 className="tracking-tight sm:text-4xl">{property.name}</h3>
-          <p className="text-muted mt-2">{property.address}</p>
-        </div>
-        <CardBody className="px-4">
-          <CardTitle className="text-2xl">Property Details</CardTitle>
-          <hr />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            <div>
-              <p className="text-muted text-sm">Total Units</p>
-              <p className="text-2xl font-semibold">{units.length}</p>
+        <div className="bg-secondary px-4 py-5 sm:px-10 sm:py-12 rounded-lg flex justify-between">
+          <div className="flex flex-col">
+            <span className="tracking-tight text-[34px] sm:text-4xl text-white font-bold">
+              {property.name}
+            </span>
+            <span className="mt-2 text-[#ebcbda]">{property.address}</span>
+          </div>
+          <div className="flex gap-4 text-white">
+            <div className="flex flex-col">
+              <span className="fw-bolder text-[30px]">{units.length}</span>
+              <span className="text-[13px] text-[#ebcbda]">Total units</span>
             </div>
-            <div>
-              <p className="text-muted text-sm">Occupied Units</p>
-              <p className="text-2xl font-semibold">
+            <div className="flex flex-col">
+              <span className="fw-bolder text-[30px]">
                 {units.filter((u) => u.leases.length > 0).length}
-              </p>
+              </span>
+              <span className="text-[13px] text-[#ebcbda]">Occupied</span>
             </div>
-            <div>
-              <p className="text-muted text-sm">Vacant Units</p>
-              <p className="text-2xl font-semibold">
+            <div className="flex flex-col">
+              <span className="fw-bolder text-[30px]">
                 {units.filter((u) => u.leases.length === 0).length}
-              </p>
+              </span>
+              <span className="text-[13px] text-[#ebcbda]">Vacant</span>
             </div>
           </div>
-        </CardBody>
+        </div>
       </Card>
 
       {/* Units Table Card */}
@@ -94,24 +88,24 @@ export default function PropertyDetailClient({
           <hr />
           <Table responsive>
             <thead>
-              <tr>
-                <th>Unit Number</th>
+              <tr className="text-uppercase text-[12px]">
+                <th>Unit</th>
                 <th>Monthly Rent</th>
                 <th>Tenant</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {units.length > 0 ? (
                 units.map((unit) => (
                   <tr key={unit.id}>
-                    <td>{unit.unitNumber}</td>
+                    <td className="font-bold">{unit.unitNumber}</td>
                     <td>KES {unit.monthlyRent.toLocaleString()}</td>
-                    <td>
+                    <td className={`${unit.leases.length > 0?"":"text-muted"}`}>
                       {unit.leases.length > 0
                         ? unit.leases[0].tenant.name
-                        : "Vacant"}
+                        : "No tenant"}
                     </td>
                     <td>
                       {unit.leases.length > 0 ? (

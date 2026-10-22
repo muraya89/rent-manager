@@ -30,7 +30,7 @@ export function ActivityTable({
   query: string;
 }) {
   return (
-    <Card className="rounded-2xl">
+    <Card className="rounded-2xl border-0">
       <CardHeader className="flex flex-wrap items-center justify-between gap-3 border-0 bg-white py-3">
         <div>
           <span className="font-bold text-xl">Recent rent activity</span>

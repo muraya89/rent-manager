@@ -1,5 +1,6 @@
 import { Card, Badge, CardBody, CardTitle, Row, Col } from "reactstrap";
 import { Property } from "@/app/Types";
+import BadgeComponent from "@/app/shared-components/badge";
 export default function PropertyCard({
   property,
   onClick,
@@ -20,10 +21,10 @@ export default function PropertyCard({
 
   return (
     <Card
-      className="h-100 overflow-hidden border-0 shadow-sm"
+      className="h-100 overflow-hidden border-0 shadow-xs p-4"
       style={{
         cursor: "pointer",
-        borderRadius: "16px",
+        borderRadius: "22px",
       }}
       onClick={onClick}
     >
@@ -35,6 +36,7 @@ export default function PropertyCard({
           backgroundSize: "cover",
           backgroundPosition: "center",
           position: "relative",
+          borderRadius: "22px",
         }}
       >
         <div
@@ -53,7 +55,7 @@ export default function PropertyCard({
         </div>
       </div>
 
-      <CardBody className="p-4">
+      <CardBody>
         {/* Name */}
         <CardTitle tag="h5" className="mb-1 fw-semibold">
           {property.name}
@@ -63,43 +65,40 @@ export default function PropertyCard({
         <div className="text-muted small mb-4">📍 {property.address}</div>
 
         {/* Unit stats */}
-        <Row className="g-2 mb-4">
-          <Col xs="4">
-            <div className="bg-light rounded-3 p-3 text-center">
-              <div className="fw-bold fs-5">{totalUnits}</div>
+        <div className="flex gap-2">
+            <BadgeComponent
+              pill
+              textColor="text-primary"
+              bgColor="bg-(--primary-light)"
+              caption={`${totalUnits} Units`}
+            />
 
-              <div className="text-muted small">Units</div>
-            </div>
-          </Col>
+            <BadgeComponent
+              pill
+              textColor="text-success"
+              bgColor="bg-success-subtle"
+              caption={`${occupiedUnits} Occupied`}
+            />
 
-          <Col xs="4">
-            <div className="bg-success-subtle rounded-3 p-3 text-center">
-              <div className="fw-bold fs-5 text-success">{occupiedUnits}</div>
-
-              <div className="text-muted small">Occupied</div>
-            </div>
-          </Col>
-
-          <Col xs="4">
-            <div className="bg-warning-subtle rounded-3 p-3 text-center">
-              <div className="fw-bold fs-5 text-warning">{vacantUnits}</div>
-
-              <div className="text-muted small">Vacant</div>
-            </div>
-          </Col>
-        </Row>
+            <BadgeComponent
+              pill
+              textColor="text-warning"
+              bgColor="bg-warning-subtle"
+              caption={`${vacantUnits} Vacant`}
+            />
+        </div>
 
         {/* Occupancy */}
-        <div className="mb-4">
+        <div className="my-3">
           <div className="d-flex justify-content-between mb-2">
-            <span className="small text-muted">Occupancy</span>
+            <span className="small font-bold">Occupancy</span>
 
-            <span className="small fw-semibold">{occupancyRate}%</span>
+            <span className="small font-bold">{occupancyRate}%</span>
           </div>
 
-          <div className="progress" style={{ height: "7px" }}>
+          <div className="p--progress" style={{ height: "7px" }}>
             <div
-              className="progress-bar"
+              className="p--progress-bar"
               style={{
                 width: `${occupancyRate}%`,
               }}

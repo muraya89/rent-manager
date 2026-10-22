@@ -7,7 +7,21 @@ export interface Unit {
 export interface UnitFormValues {
   unitNumber: string;
   monthlyRent: number;
-  isOccupied: false;
+  isOccupied: boolean;
+
+  tenant: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+
+  lease: {
+    // tenantId: number;
+    // unitId: number;
+    startDate: string;
+    endDate?: string;
+    monthlyRent: number;
+  };
 
   name: string;
   email: string;
@@ -76,3 +90,11 @@ export interface UnitViewData {
     }[];
   }[];
 }
+
+export type OccupiedSwitchProps = {
+  id?: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  title?: string;
+  description?: string;
+};

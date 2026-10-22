@@ -6,6 +6,7 @@ import SectionPage from "@/app/shared-components/section-page";
 import { Property } from "@/app/Types/index";
 import StatCard from "./StatCrd"
 import PropertyCard from "./PropertyCard"
+import EmptyState from "@/app/shared-components/emptyState";
 
 export default function PropertiesSectionPage({
   title,
@@ -60,7 +61,7 @@ export default function PropertiesSectionPage({
         {properties.length > 0 ? (
           <Row className="g-4">
             {properties.map((property) => (
-              <Col key={property.id} md="6" xl="4">
+              <Col key={property.id} md="7" xl="5">
                 <PropertyCard
                   property={property}
                   onClick={() =>

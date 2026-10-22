@@ -24,8 +24,7 @@ export default function addTenantForm() {
           }}
         >
           <Form>
-           
-            <TenantForm/>
+            <TenantForm className="px-6" />
 
             <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
               <Link href={`/dashboard/tenants`}>
