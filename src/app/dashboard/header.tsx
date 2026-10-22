@@ -1,0 +1,44 @@
+import { Button, Input, InputGroup, InputGroupText } from "reactstrap";
+import { Icon } from "./dashboard-icon";
+
+type Props = {
+  query: string;
+  onQueryChange: (value: string) => void;
+  onAddTenant: () => void;
+  onOpenMenu: () => void;
+};
+export function DashboardHeader({
+  query,
+  onQueryChange,
+  onOpenMenu,
+}: Props) {
+  return (
+    <header className="mb-6 flex items-center justify-between gap-3 sm:mb-8">
+      <Button
+        color="link"
+        onClick={onOpenMenu}
+        className="mobile-menu-button grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-200 bg-white p-0 text-slate-600 shadow-sm"
+        aria-label="Open navigation"
+      >
+        <Icon name="grid" size={19} />
+      </Button>
+      <InputGroup className="hidden max-w-sm rounded-xl shadow-sm sm:flex">
+        <Input
+          value={query}
+          onChange={(event) => onQueryChange(event.target.value)}
+          className="py-2.5 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-200 focus:shadow-none"
+          placeholder="Search tenants, properties..."
+        />
+      </InputGroup>
+      <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        <button
+          className="relative grid h-10 w-10 place-items-center rounded-full bg-white text-slate-600 shadow-sm" 
+          aria-label="Notifications"
+        >
+          <Icon name="bell" size={19} />
+          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white" />
+        </button>
+      </div>
+    </header>
+  );
+}
