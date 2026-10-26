@@ -1,11 +1,11 @@
 "use client";
 
-import { Badge, Card, CardBody, CardTitle, Col, Row } from "reactstrap";
+import { Badge, Card, CardBody, Button, Col, Row } from "reactstrap";
 import { useRouter } from "next/navigation";
 import SectionPage from "@/app/shared-components/section-page";
 import { Property } from "@/app/Types/index";
-import StatCard from "./StatCrd"
-import PropertyCard from "./PropertyCard"
+import StatCard from "./StatCrd";
+import PropertyCard from "./PropertyCard";
 import EmptyState from "@/app/shared-components/emptyState";
 
 export default function PropertiesSectionPage({
@@ -72,7 +72,9 @@ export default function PropertiesSectionPage({
             ))}
           </Row>
         ) : (
-          <EmptyState title={title} />
+          <Card className="p-4">
+            <EmptyState title={title} route="/dashboard/properties/add"/>
+          </Card>
         )}
       </div>
     </SectionPage>

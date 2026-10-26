@@ -1,27 +1,29 @@
-import {
-  Card,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
-  FormGroup,
-  Label,
-} from "reactstrap";
-import { Formik, Field, Form } from "formik";
-import { useState } from "react";
+"use client";
+import { Card, Nav, NavItem, NavLink, FormGroup, Label } from "reactstrap";
+import { Field, useFormikContext } from "formik";
+import { useState, useEffect } from "react";
 import BadgeComponent from "@/app/shared-components/badge";
+import { Tenant, TenantMode } from "@/app/Types/tenant";
+import { getNotLeasedTenant } from "@/lib/queries/tenantQueries";
+import PlainInput from "@/app/shared-components/plainInput";
+import SectionTitle from "@/app/shared-components/sectionTitle";
 
-export default function TenantForm({ className }: { className?: string }) {
-  const PlainInput = ({ field, form, ...props }) => {
-    return (
-      <input
-        {...field}
-        {...props}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-    );
-  };
+type TenantFormContext = "unit" | "tenant";
+type FormValues = {
+  tenantMode: TenantMode;
+  tenantId: string | null;
+  tenant: { name: string; email: string; phone: string };
+};
+export default function TenantForm({
+  className,
+  context = "unit",
+}: {
+  className?: string;
+  context?: TenantFormContext;
+}) {
+  const inUnitForm = context === "unit";
+
+  // Unit page: Unit Details is already 1, so we start at 2
   const tabs = [
     {
       id: "new",
@@ -32,44 +34,66 @@ export default function TenantForm({ className }: { className?: string }) {
       label: "Existing Tenant",
     },
   ];
-  const [activeTab, setActiveTab] = useState("new");
+  const { values, setFieldValue, errors, touched } =
+    useFormikContext<FormValues>();
+  const [loading, setLoading] = useState(false);
+  const [available, setAvailable] = useState<Tenant[]>([]);
+  useEffect(() => {
+    if (values.tenantMode !== "existing" || available.length) return;
+    setLoading(true);
+    getNotLeasedTenant()
+      .then(setAvailable)
+      .finally(() => setLoading(false));
+  }, [values.tenantMode, available.length]);
+  const selected = available.find((t) => String(t.id) === values.tenantId);
+  const switchMode = (mode: TenantMode) => {
+    if (mode === values.tenantMode) return;
+    setFieldValue("tenantMode", mode);
+    // clear the other mode's data so it can never be submitted by accident
+    if (mode === "new") setFieldValue("tenantId", "");
+    else setFieldValue("tenant", { name: "", email: "", phone: "" });
+  };
   return (
     <>
       <Card className={`${className} py-6`}>
         <div className="d-flex justify-between items-center">
-          <span className="text-2xl font-bold">Tenant Information</span>
+          <SectionTitle title="Tenant Information" />
 
-          <Nav tabs className="border-0">
-            {tabs.map((tab) => (
-              <NavItem key={tab.id}>
-                <NavLink
-                  href="#"
-                  active={activeTab === tab.id}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setActiveTab(tab.id);
-                  }}
-                  className={`cursor-pointer rounded-t-lg border-0 px-4 py-3 text-sm transition  ${
-                    activeTab === tab.id
-                      ? "bg-sidebar !rounded-4xl text-white"
-                      : "!text-gray-500 !hover:bg-gray-50 !hover:text-gray-800"
-                  }`}
-                >
-                  {tab.label}
-                </NavLink>
-              </NavItem>
-            ))}
-          </Nav>
+          {inUnitForm && (
+            <>
+              <Nav tabs className="border-0">
+                {tabs.map((tab) => (
+                  <NavItem key={tab.id}>
+                    <NavLink
+                      href="#"
+                      active={values.tenantMode === tab.id}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        switchMode(tab.id);
+                      }}
+                      className={`cursor-pointer rounded-t-lg border-0 px-4 py-3 text-sm transition  ${
+                        values.tenantMode === tab.id
+                          ? "bg-sidebar !rounded-4xl text-white"
+                          : "!text-gray-500 !hover:bg-gray-50 !hover:text-gray-800"
+                      }`}
+                    >
+                      {tab.label}
+                    </NavLink>
+                  </NavItem>
+                ))}
+              </Nav>
+            </>
+          )}
         </div>
 
-        <TabContent activeTab={activeTab}>
-          <TabPane tabId="new">
+        {values.tenantMode == "new" ? (
+          <>
             <FormGroup>
-              <Label for="name">Name</Label>
+              <Label for="tenant.name">Name</Label>
               <Field
-                id="name"
+                id="tenant.name"
                 component={PlainInput}
-                name="name"
+                name="tenant.name"
                 type="text"
                 required
                 placeholder="e.g., Jane Doe, John Doe"
@@ -78,11 +102,11 @@ export default function TenantForm({ className }: { className?: string }) {
 
             <div className="d-flex gap-3">
               <FormGroup>
-                <Label for="email">Email</Label>
+                <Label for="tenant.email">Email</Label>
                 <Field
-                  id="email"
+                  id="tenant.email"
                   component={PlainInput}
-                  name="email"
+                  name="tenant.email"
                   type="text"
                   required
                   placeholder="e.g., example@gmail.com"
@@ -90,63 +114,82 @@ export default function TenantForm({ className }: { className?: string }) {
               </FormGroup>
 
               <FormGroup>
-                <Label for="phone">Phone Number</Label>
+                <Label for="tenant.phone">Phone Number</Label>
                 <Field
-                  id="phone"
+                  id="tenant.phone"
                   component={PlainInput}
-                  name="phone"
+                  name="tenant.phone"
                   type="text"
                   required
                   placeholder="e.g., +254712345678"
                 ></Field>
               </FormGroup>
             </div>
-          </TabPane>
-
-          <TabPane tabId="existing">
+          </>
+        ) : (
+          <>
             <FormGroup>
-              <Label for="tenant">Tenant</Label>
+              <Label for="tenantId" className="font-bold">
+                Tenant
+              </Label>
               <Field
-                id="tenant"
-                component={PlainInput}
-                name="tenant"
-                type="text"
-                required
-                placeholder="e.g., Jane Doe, John Doe"
-              ></Field>
+                as="select"
+                id="tenantId"
+                name="tenantId"
+                className="form-select"
+              >
+                <option value="">Select a tenant…</option>
+                {available.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name} · {t.phone}
+                  </option>
+                ))}
+              </Field>
+              {touched.tenantId && errors.tenantId && (
+                <div className="text-danger small mt-1">{errors.tenantId}</div>
+              )}
             </FormGroup>
 
-            <div className="d-flex gap-3 px-4 w-100">
-              <div className="d-flex">
-                <div
-                  className={`grid h-9 w-9 place-items-center rounded-full text-xs font-bold text-(--primary) bg-(--primary-light)`}
-                >
-                  {/* {tenant?.initials} */}
-                </div>
+            {selected && (
+              <div className="d-flex justify-between items-center px-4 py-2 w-100 bg-(--background) border-2 rounded-xl">
+                <div className="d-flex gap-3 items-center">
+                  <div
+                    className={`grid h-9 w-9 place-items-center rounded-full text-xs font-bold text-(--primary) bg-(--primary-light)`}
+                  >
+                    {/* {tenant?.initials} */}
+                  </div>
 
-                <div className="d-flex flex-col">
-                  <p className="font-bold text-slate-700 mb-0">
-                    Carol
-                  </p>
+                  <div className="d-flex flex-col">
+                    <p className="font-bold text-slate-700 mb-0">
+                      {selected.name}
+                    </p>
 
-                  <div>
-                    <span className="text-slate-700 mb-0">tenant@mail.com</span>
-                    <span className="text-slate-700 mb-0">071234567</span>
+                    <div>
+                      <span className="text-slate-700 mb-0">
+                        {selected.email}
+                        </span>
+                        &nbsp;
+                        :
+                        &nbsp;
+                      <span className="text-slate-700 mb-0">
+                        {selected.phone}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div>
-                <BadgeComponent
-                  pill
-                  textColor="text-primary"
-                  bgColor="bg-(--primary-light)"
-                  caption="No lease yet"
-                />
+                <div>
+                  <BadgeComponent
+                    pill
+                    textColor="text-primary"
+                    bgColor="bg-(--primary-light)"
+                    caption="No lease yet"
+                  />
+                </div>
               </div>
-            </div>
-          </TabPane>
-        </TabContent>
+            )}
+          </>
+        )}
       </Card>
 
       {/* <Card className={`${className} py-6 my-4`}>
@@ -160,8 +203,40 @@ export default function TenantForm({ className }: { className?: string }) {
       {/* </Card> */}
 
       <Card className={`${className} py-6 my-4`}>
-        <span className="text-2xl font-bold mb-4">Lease Information</span>
-        {/* TO DO lease start date and end date */}
+        <SectionTitle title="Lease Information" className="mb-3" />
+        <div className="d-flex gap-4">
+          <FormGroup className="w-full">
+            <Label for="lease.startDate">Lease Start</Label>
+            <Field
+              id="lease.startDate"
+              component={PlainInput}
+              name="lease.startDate"
+              type="date"
+              required
+            ></Field>
+          </FormGroup>
+
+          <FormGroup className="w-full">
+            <Label for="lease.endDate">Lease End</Label>
+            <Field
+              id="lease.endDate"
+              component={PlainInput}
+              name="lease.endDate"
+              type="date"
+            ></Field>
+          </FormGroup>
+
+          <FormGroup className="w-full">
+            <Label for="lease.monthlyRent">Monthly Rent (KES)</Label>
+            <Field
+              id="lease.monthlyRent"
+              component={PlainInput}
+              name="lease.monthlyRent"
+              type="number"
+              required
+            ></Field>
+          </FormGroup>
+        </div>
       </Card>
     </>
   );

@@ -1,3 +1,4 @@
+import { TenantMode } from "./tenant";
 export interface Unit {
   id: number;
   unitNumber: string;
@@ -14,6 +15,7 @@ export interface UnitFormValues {
     email: string;
     phone: string;
   };
+  tenantId: string | null;
 
   lease: {
     // tenantId: number;
@@ -22,10 +24,7 @@ export interface UnitFormValues {
     endDate?: string;
     monthlyRent: number;
   };
-
-  name: string;
-  email: string;
-  phone: string;
+  tenantMode: TenantMode;
 }
 
 export interface UnitViewData {

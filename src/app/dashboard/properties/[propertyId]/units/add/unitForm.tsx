@@ -13,6 +13,8 @@ import { Form, Formik, Field } from "formik";
 import { createUnit } from "@/lib/actions/unitActions";
 import { UnitFormValues, OccupiedSwitchProps } from "@/app/Types/unit";
 import TenantForm from "@/app/dashboard/tenants/components/TenantForm";
+import SectionTitle from "@/app/shared-components/sectionTitle";
+import PlainInput from "@/app/shared-components/plainInput";
 
 interface AddUnitFormProps {
   propertyId: number;
@@ -57,21 +59,10 @@ export default function addUnitForm({
     monthlyRent: 0,
     isOccupied: true,
     tenant: emptyTenant,
+    tenantId: null,
     lease: emptyLease,
-    name: "",
-    email: "",
-    phone: "",
+    tenantMode: "new",
   };
-  const PlainInput = ({ field, form, ...props }) => {
-    return (
-      <input
-        {...field}
-        {...props}
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-    );
-  };
-
   return (
     <div className="px-4">
       <Breadcrumb className="px-4">
@@ -104,9 +95,9 @@ export default function addUnitForm({
         }
       >
         {({ values, setFieldValue }) => (
-          <Form className="mt-4">
+          <Form className="mt-4 numbered-form">
             <Card className="px-4 py-6 mb-4">
-              <span className="text-2xl font-bold mb-2">Unit Details</span>
+              <SectionTitle title="Unit Details" />
 
               <div className="d-flex justify-between gap-4">
                 <FormGroup className="w-full">
@@ -144,6 +135,8 @@ export default function addUnitForm({
                   setFieldValue("isOccupied", checked);
                   if (!checked) {
                     // clear stale tenant data when switched off
+                    setFieldValue("tenantMode", "new");
+                    setFieldValue("tenantId", null);
                     setFieldValue("tenant", emptyTenant);
                     setFieldValue("lease", emptyLease);
                   }
@@ -152,13 +145,11 @@ export default function addUnitForm({
             </Card>
 
             <div>
-              {values.isOccupied && <TenantForm className="px-4" />}
+              {/* TENANT FORM */}
+              {values.isOccupied && (
+                <TenantForm className="px-4" context="unit" />
+              )}
 
-              {/* =========================================================
-              
-                 BUTTONS
-              
-              ========================================================= */}
               <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
                 <Link href={`/dashboard/properties/${propertyId}`}>
                   <button

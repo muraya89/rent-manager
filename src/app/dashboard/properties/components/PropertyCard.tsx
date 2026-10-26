@@ -1,6 +1,7 @@
 import { Card, Badge, CardBody, CardTitle, Row, Col } from "reactstrap";
 import { Property } from "@/app/Types";
 import BadgeComponent from "@/app/shared-components/badge";
+import Image from "next/image";
 export default function PropertyCard({
   property,
   onClick,
@@ -29,7 +30,18 @@ export default function PropertyCard({
       onClick={onClick}
     >
       {/* Image */}
-      <div
+      {property.coverImageUrl ? (
+        <Image
+          src={property.coverImageUrl}
+          alt={property.name}
+          className="h-40 w-full object-cover"
+        />
+      ) : (
+        <div className="grid h-40 place-items-center bg-(--primary) text-4xl font-bold text-white">
+          {property.name.slice(0, 2).toUpperCase()}
+        </div>
+      )}
+      {/* <div
         style={{
           height: "180px",
           backgroundImage: "url('https://picsum.photos/600/400')",
@@ -53,7 +65,7 @@ export default function PropertyCard({
             {occupiedUnits}/{totalUnits} occupied
           </Badge>
         </div>
-      </div>
+      </div> */}
 
       <CardBody>
         {/* Name */}
@@ -66,26 +78,26 @@ export default function PropertyCard({
 
         {/* Unit stats */}
         <div className="flex gap-2">
-            <BadgeComponent
-              pill
-              textColor="text-primary"
-              bgColor="bg-(--primary-light)"
-              caption={`${totalUnits} Units`}
-            />
+          <BadgeComponent
+            pill
+            textColor="text-primary"
+            bgColor="bg-(--primary-light)"
+            caption={`${totalUnits} Units`}
+          />
 
-            <BadgeComponent
-              pill
-              textColor="text-success"
-              bgColor="bg-success-subtle"
-              caption={`${occupiedUnits} Occupied`}
-            />
+          <BadgeComponent
+            pill
+            textColor="text-success"
+            bgColor="bg-success-subtle"
+            caption={`${occupiedUnits} Occupied`}
+          />
 
-            <BadgeComponent
-              pill
-              textColor="text-warning"
-              bgColor="bg-warning-subtle"
-              caption={`${vacantUnits} Vacant`}
-            />
+          <BadgeComponent
+            pill
+            textColor="text-warning"
+            bgColor="bg-warning-subtle"
+            caption={`${vacantUnits} Vacant`}
+          />
         </div>
 
         {/* Occupancy */}

@@ -11,6 +11,7 @@ export default function addTenantForm() {
     name: "",
     email: "",
     phone: "",
+    tenantMode: "new",
   };
 
 
@@ -23,8 +24,8 @@ export default function addTenantForm() {
             await createTenant(values);
           }}
         >
-          <Form>
-            <TenantForm className="px-6" />
+          <Form className="numbered-form">
+            <TenantForm className="px-6" context="tenant"/>
 
             <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
               <Link href={`/dashboard/tenants`}>

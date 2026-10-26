@@ -1958,3 +1958,29 @@ hr {
     }
   }
 }
+
+.numbered-form {
+  counter-reset: form-step;
+}
+
+.step-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+
+  &::before {
+    counter-increment: form-step;
+    content: counter(form-step);
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 1rem;
+  }
+}

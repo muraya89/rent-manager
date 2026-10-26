@@ -2,6 +2,7 @@ export interface Property {
   id: number;
   name: string;
   address: string;
+  coverImageUrl: string;
   monthlyRent: number;
   units: Array<{
     id: number;
@@ -14,4 +15,11 @@ export interface Property {
       };
     }>;
   }>;
+}
+
+export interface PropertyFormValues {
+  name: string;
+  image:  File | null ;
+  address: string;
+  monthlyRent: number;
 }

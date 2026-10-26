@@ -34,7 +34,7 @@ export default function TenantsSectionPage({
   leasedTenants: number;
   newTenants: number;
   expiringTenants: number;
-  unleasedTenants: number
+  unleasedTenants: number;
 }) {
   return (
     <div className="px-4">
@@ -92,16 +92,16 @@ export default function TenantsSectionPage({
 
           <hr />
           <div className="p-7 sm:p-10">
-            {tenants.length > 0 ? (
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
+            <Table>
+              <thead className="text-[11px] uppercase tracking-wider text-slate-400">
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              {tenants.length > 0 ? (
                 <tbody>
                   {tenants.map((tenant) => (
                     <tr key={tenant.id}>
@@ -119,17 +119,16 @@ export default function TenantsSectionPage({
                     </tr>
                   ))}
                 </tbody>
-              </Table>
-            ) : (
-              <Row className="g-4">
-                <Col md="8">
-                  <EmptyState title={title} />
-                </Col>
-                <Col md="4">
-                  <QuickAction title={title} />
-                </Col>
-              </Row>
-            )}
+              ) : (
+                <tbody>
+                  <tr>
+                    <td colSpan={4}>
+                      <EmptyState title={title} />
+                    </td>
+                  </tr>
+                </tbody>
+              )}
+            </Table>
           </div>
         </CardBody>
       </Card>

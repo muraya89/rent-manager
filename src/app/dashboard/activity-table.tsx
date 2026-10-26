@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Badge, Card, CardBody, CardHeader, Table } from "reactstrap";
+import { Badge, Card, CardBody, CardHeader, Table, Row, Col } from "reactstrap";
 import { Icon } from "./dashboard-icon";
 import { formatMoney as money } from "@/lib/helpers/helper";
+import EmptyState from "@/app/shared-components/emptyState";
 
 function PaymentStatus({ status }: { status: string }) {
   const color =
@@ -34,11 +35,12 @@ export function ActivityTable({
       <CardHeader className="flex flex-wrap items-center justify-between gap-3 border-0 bg-white py-3">
         <div>
           <span className="font-bold text-xl">Recent rent activity</span>
-          <p className="text-xs text-slate-500">
-            Latest tenant payments.
-          </p>
+          <p className="text-xs text-slate-500">Latest tenant payments.</p>
         </div>
-        <Link href="/dashboard/payments" className="text-sm font-semibold text-(--primary)!">
+        <Link
+          href="/dashboard/payments"
+          className="text-sm font-semibold text-(--primary)!"
+        >
           View all
         </Link>
       </CardHeader>
@@ -70,7 +72,9 @@ export function ActivityTable({
                       <p className="font-bold text-slate-700 mb-0">
                         {tenant.name}
                       </p>
-                      <p className="text-xs text-slate-400 mb-0">{tenant.unit}</p>
+                      <p className="text-xs text-slate-400 mb-0">
+                        {tenant.unit}
+                      </p>
                     </div>
                   </div>
                 </td>
@@ -91,9 +95,11 @@ export function ActivityTable({
           </tbody>
         </Table>
         {tenants.length === 0 && (
-          <p className="px-6 py-10 text-center text-sm text-slate-500">
-            No tenants match “{query}”.
-          </p>
+          <Row className="g-4 py-4">
+            <Col md="12">
+              <EmptyState title="recent activity" />
+            </Col>
+          </Row>
         )}
       </CardBody>
     </Card>
