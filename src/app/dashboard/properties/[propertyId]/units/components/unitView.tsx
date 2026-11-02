@@ -184,7 +184,7 @@ export default function UnitView({ unit, tenants }: UnitViewProps) {
 
               {!currentLease && (
                 <Button
-                  color="success"
+                  color="light"
                   className="rounded-lg px-4"
                   onClick={toggleCreateLeaseDialog}
                 >

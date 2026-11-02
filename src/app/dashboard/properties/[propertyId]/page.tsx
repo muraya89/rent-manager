@@ -5,6 +5,8 @@ import {
   BreadcrumbItem,
 } from "reactstrap";
 import PropertyDetailClient from "./components/property-detail-client";
+import { getPropertyUnits } from "@/lib/queries/unitQueries";
+import { notFound } from "next/navigation";
 
 export default async function PropertyDetail({
   params,
@@ -42,27 +44,10 @@ export default async function PropertyDetail({
     });
 
     if (!property) {
-      return <div>Property not found</div>;
+      notFound()
     }
 
-    units = await prisma.unit.findMany({
-      where: {
-        propertyId: property_id,
-      },
-      select: {
-        id: true,
-        unitNumber: true,
-        monthlyRent: true,
-        propertyId: true,
-        leases: {
-          where: { status: "ACTIVE" },
-          select: {
-            id: true,
-            tenant: { select: { name: true } },
-          },
-        },
-      },
-    });
+    units = await getPropertyUnits(property.id)
   } catch (error) {
     console.error("Error in PropertyDetail:", error);
     return (

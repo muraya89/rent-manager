@@ -11,7 +11,7 @@ export default function StatCard({
   secondary?: string;
 }) {
   return (
-    <Card className="border-0 h-100">
+    <Card className="h-100">
       <CardBody className="p-4">
         <div className="d-flex justify-content-between align-items-start">
           <div>

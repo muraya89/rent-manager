@@ -1,3 +1,18 @@
+// lib/serialize.ts
+type DecimalLike = { toNumber: () => number };
+
+const isDecimal = (v: unknown): v is DecimalLike =>
+  typeof v === "object" &&
+  v !== null &&
+  "toNumber" in v &&
+  typeof (v as DecimalLike).toNumber === "function";
+
+export function plain<T>(value: T): T {
+  return JSON.parse(
+    JSON.stringify(value, (_key, v) => (isDecimal(v) ? v.toNumber() : v)),
+  );
+}
+
 export function formatMoney(
   value: { toString(): string } | number | null | undefined,
 ) {
@@ -25,7 +40,12 @@ export function serializeData<T>(data: T): T {
         try {
           return value.toISOString();
         } catch (error) {
-          console.log("Error converting date to ISO for key:", key, "error:", error);
+          console.log(
+            "Error converting date to ISO for key:",
+            key,
+            "error:",
+            error,
+          );
           return null;
         }
       }

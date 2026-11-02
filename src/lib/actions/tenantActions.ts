@@ -3,20 +3,34 @@
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { serializeData } from "@/lib/helpers/helper";
+import { addLease } from "@/lib/actions/leaseActions";
 
 export async function createTenant(values: {
-  name: string;
-  email: string;
-  phone: string;
+  isOccupied: boolean;
+  tenant: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  lease: {
+    monthlyRent: number;
+    depositAmount: number;
+    startDate: string;
+    endDate: string;
+    occupants: number;
+    rentDueDay: number;
+  };
 }) {
   try {
-    await prisma.tenant.create({
+    const result = await prisma.tenant.create({
       data: {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
+        name: values.tenant.name,
+        email: values.tenant.email,
+        phone: values.tenant.phone,
       },
     });
+
+    if (values.isOccupied) addLease({ tenantId: result.id, ...values });
   } catch (error) {
     console.error("Failed to create tenant:", error);
     throw error;
@@ -24,7 +38,7 @@ export async function createTenant(values: {
 
   redirect(
     `/dashboard/tenants?success=Tenant%20${encodeURIComponent(
-      values.name,
+      values.tenant.name,
     )}%20added%20successfully`,
   );
 }

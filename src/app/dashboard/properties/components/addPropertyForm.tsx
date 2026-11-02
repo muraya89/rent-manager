@@ -8,6 +8,9 @@ import { createProperty } from "@/lib/actions/propertyActions";
 import PlainInput from "@/app/shared-components/plainInput";
 import SectionTitle from "@/app/shared-components/sectionTitle";
 import ImagePicker from "@/app/shared-components/imagePicker";
+import { useRef } from "react";
+
+type NextStep = "list" | "addUnit";
 
 export default function addTenantForm() {
   const initialValues: PropertyFormValues = {
@@ -16,6 +19,7 @@ export default function addTenantForm() {
     monthlyRent: 0,
     image: null as File | null,
   };
+  const nextRef = useRef<NextStep>("list");
 
   return (
     <>
@@ -28,13 +32,14 @@ export default function addTenantForm() {
             formData.append("address", values.address);
             formData.append("monthlyRent", String(values.monthlyRent));
             if (values.image) formData.append("image", values.image);
+            formData.append("next", nextRef.current);
 
             // On success the action redirects, so this only returns when something went wrong
             const res = await createProperty(formData);
             if (res && !res.ok) helpers.setStatus(res.error);
           }}
         >
-          {({ values, setFieldValue, status }) => (
+          {({ values, setFieldValue, status, isSubmitting }) => (
             <Form className="mt-4 numbered-form">
               {status && <div className="alert alert-danger">{status}</div>}
               <Card className="px-4 py-6 mb-4">
@@ -118,19 +123,37 @@ export default function addTenantForm() {
               )}
             </FormGroup> */}
               <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
-                <Link href={`/dashboard/tenants`}>
+                <Link href={`/dashboard/properties`}>
                   <button
                     type="button"
-                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 rounded-pill"
                   >
                     Cancel
                   </button>
                 </Link>
+                {/* <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 rounded-pill"
+                >
+                  Save Property
+                </button> */}
+
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  disabled={isSubmitting}
+                  onClick={() => (nextRef.current = "list")}
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 rounded-pill"
                 >
-                  Save Tenant
+                  Save property
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  onClick={() => (nextRef.current = "addUnit")}
+                  className="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700 rounded-pill"
+                >
+                  Save and add units
                 </button>
               </div>
             </Form>

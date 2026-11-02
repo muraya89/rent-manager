@@ -14,7 +14,6 @@ export default function addTenantForm() {
     tenantMode: "new",
   };
 
-
   return (
     <>
       <div>
@@ -25,20 +24,20 @@ export default function addTenantForm() {
           }}
         >
           <Form className="numbered-form">
-            <TenantForm className="px-6" context="tenant"/>
+            <TenantForm className="px-6" context="tenant" />
 
-            <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
+            <div className="mt-5 flex justify-end gap-4 pt-3">
               <Link href={`/dashboard/tenants`}>
                 <button
                   type="button"
-                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                  className="px-4 py-2 border  text-gray-700 rounded-pill hover:bg-gray-50"
                 >
                   Cancel
                 </button>
               </Link>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-primary rounded-pill text-white hover:bg-blue-700"
               >
                 Save Tenant
               </button>

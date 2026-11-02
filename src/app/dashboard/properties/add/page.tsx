@@ -1,10 +1,8 @@
 import AddPropertyForm from "../components/addPropertyForm";
 import { Breadcrumb, BreadcrumbItem, Card, Button } from "reactstrap";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 export default function addTenantPage() {
-  const router = useRouter();
   return (
     <>
       <div>

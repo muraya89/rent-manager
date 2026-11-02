@@ -35,7 +35,12 @@ export default function PropertiesSectionPage({
   const vacantUnits = totalUnits - occupiedUnits;
 
   return (
-    <SectionPage title={title} description={description}>
+    <SectionPage
+      title={title}
+      description={description}
+      link="/dashboard/properties/add"
+      linkCaption="Add Property"
+    >
       <div className="mt-4 px-4 pb-5">
         {/* Stats */}
         <Row className="g-3 mb-4">
@@ -73,7 +78,7 @@ export default function PropertiesSectionPage({
           </Row>
         ) : (
           <Card className="p-4">
-            <EmptyState title={title} route="/dashboard/properties/add"/>
+            <EmptyState title={title} route="/dashboard/properties/add" />
           </Card>
         )}
       </div>

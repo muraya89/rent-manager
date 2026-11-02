@@ -63,17 +63,17 @@ export async function createProperty(formData: FormData) {
 
   revalidatePath("/dashboard/properties");
 
-  // 5. Redirect OUTSIDE any try/catch, because redirect() works by throwing
+  const next = formData.get("next") === "addUnit" ? "addUnit" : "list";
+
+  const destination =
+    next === "addUnit"
+      ? `/dashboard/properties/${propertyId}/units/add`
+      : "/dashboard/properties";
+
   const params = new URLSearchParams({
     success: `Property ${name} created successfully`,
   });
-  if (imageFailed) {
-    params.set(
-      "warning",
-      "The cover image could not be uploaded. You can add it by editing the property.",
-    );
-  }
-  redirect(`/dashboard/properties?${params.toString()}`);
+  redirect(`${destination}?${params.toString()}`);
 }
 
 export async function updatePropertyImage(

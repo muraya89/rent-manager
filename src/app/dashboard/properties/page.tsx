@@ -10,6 +10,8 @@ export default async function PropertiesPage() {
       name: true,
       address: true,
       monthlyRent: true,
+      coverImageUrl: true,
+      coverImagePublicId: true,
       // Exclude date fields to avoid MariaDbAdapter issues
       units: {
         select: {

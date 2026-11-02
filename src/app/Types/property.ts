@@ -8,6 +8,7 @@ export interface Property {
     id: number;
     unitNumber: string;
     monthlyRent: number;
+    defaultDeposit: number;
     leases: Array<{
       id: number;
       tenant: {

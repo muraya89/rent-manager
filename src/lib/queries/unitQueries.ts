@@ -1,4 +1,42 @@
+"use server";
 import { prisma } from "@/lib/prisma";
+
+export async function getPropertyUnits(propertyId: number) {
+  if (!propertyId) {
+    throw new Error("getPropertyUnits: propertyId is required");
+  }
+
+  try {
+    const units = await prisma.unit.findMany({
+      where: { propertyId },
+      orderBy: { unitNumber: "asc" },
+      select: {
+        id: true,
+        unitNumber: true,
+        monthlyRent: true,
+        propertyId: true,
+        defaultDeposit: true,
+        leases: {
+          where: { status: "ACTIVE" },
+          take: 1, // a unit should only have one active lease
+          select: {
+            id: true,
+            tenant: { select: { id: true, name: true } },
+          },
+        },
+      },
+    });
+
+    return units.map((u) => ({
+      ...u,
+      monthlyRent: u.monthlyRent.toNumber(),
+      defaultDeposit: u.defaultDeposit?.toNumber(),
+    }));
+  } catch (error) {
+    console.error("Failed to fetch units", { propertyId, error });
+    throw new Error("Unable to load units for this property");
+  }
+}
 
 export async function viewUnit(unitID: number) {
   const unit = await prisma.unit.findUnique({

@@ -30,6 +30,7 @@
     propertyId  Int
     unitNumber  String
     monthlyRent Decimal
+    defaultDeposit Decimal? @db.Decimal(12, 2)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
@@ -54,22 +55,49 @@
     TERMINATED
   }
 
-  model Lease {
-    id          Int         @id @default(autoincrement())
-    tenantId    Int
-    unitId      Int
-    startDate   DateTime
-    endDate     DateTime?
-    monthlyRent Decimal
-    status      LeaseStatus @default(ACTIVE)
-    terminationReason String?
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-
-    tenant      Tenant      @relation(fields: [tenantId], references: [id])
-    unit        Unit        @relation(fields: [unitId], references: [id])
-    rentCharges RentCharge[]
+  enum DepositTransactionType {
+    RECEIVED
+    DEDUCTION
+    REFUND
   }
+
+  model DepositTransaction {
+  id         Int                    @id @default(autoincrement())
+  leaseId    Int
+  type       DepositTransactionType
+  amount     Decimal                @db.Decimal(12, 2)
+  reason     String?               
+  occurredAt DateTime               @default(now())
+  createdAt  DateTime               @default(now())
+
+  lease      Lease                  @relation(fields: [leaseId], references: [id])
+
+  @@index([leaseId])
+}
+
+model Lease {
+  id                  Int                  @id @default(autoincrement())
+  tenantId            Int
+  unitId              Int
+  startDate           DateTime
+  endDate             DateTime?
+  monthlyRent         Decimal              @db.Decimal(12, 2)
+  rentDueDay          Int                  @default(1)
+  status              LeaseStatus          @default(ACTIVE)
+  terminationReason   String?
+  depositAmount       Decimal              @default(0) @db.Decimal(12, 2)
+  occupants           Int @default(1)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  tenant              Tenant               @relation(fields: [tenantId], references: [id])
+  unit                Unit                 @relation(fields: [unitId], references: [id])
+  rentCharges         RentCharge[]
+  depositTransactions DepositTransaction[]
+
+  @@index([unitId, status])
+  @@index([tenantId, status])
+}
 
   enum RentStatus {
     UNPAID

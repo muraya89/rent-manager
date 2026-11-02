@@ -19,23 +19,34 @@ export default function PropertyCard({
 
   const occupancyRate =
     totalUnits > 0 ? Math.round((occupiedUnits / totalUnits) * 100) : 0;
-
+  
+    const imageStyle = {
+      borderRadius: "20px",
+    };
   return (
     <Card
-      className="h-100 overflow-hidden border-0 shadow-xs p-4"
+      className="h-100 overflow-hidden p-4"
       style={{
         cursor: "pointer",
-        borderRadius: "22px",
+        borderRadius: "20px",
       }}
       onClick={onClick}
     >
       {/* Image */}
       {property.coverImageUrl ? (
-        <Image
-          src={property.coverImageUrl}
-          alt={property.name}
-          className="h-40 w-full object-cover"
-        />
+        <div className="parent--image">
+          <Image
+            src={property.coverImageUrl}
+            alt={property.name}
+            className="h-40 w-full object-cover"
+            style={imageStyle}
+            width={500}
+            height={500}
+          />
+          <div className="image-chip">
+            {occupiedUnits}/{totalUnits} occupied
+          </div>
+        </div>
       ) : (
         <div className="grid h-40 place-items-center bg-(--primary) text-4xl font-bold text-white">
           {property.name.slice(0, 2).toUpperCase()}

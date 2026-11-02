@@ -49,11 +49,14 @@ export async function createUnit(propertyId: number, values: UnitFormValues) {
       const startDate = new Date(values.lease.startDate);
       const lease = await tx.lease.create({
         data: {
-          unitId: unit.id,
           tenantId,
+          unitId: unit.id,
           startDate,
           endDate: values.lease.endDate ? new Date(values.lease.endDate) : null,
           monthlyRent: values.monthlyRent,
+          depositAmount: values.lease.depositAmount || 0,
+          rentDueDay: Number(values.lease.rentDueDay) || 1,
+          occupants: values.lease.occupants || 1,
           status: "ACTIVE",
         },
       });

@@ -51,12 +51,14 @@
   --dark: #29232a;
 
   /* Layout */
-  --sidebar-bg: lab(7.78673% 1.82346 -15.0537);
+  --sidebar-bg: #0f172a;
+  /* --sidebar-bg: lab(7.78673% 1.82346 -15.0537); */
   /* --sidebar-bg: #211a20; */
-  --sidebar-text: var(--color-slate-400);
+  --sidebar-text: #ffffff;
+  /* --sidebar-text: var(--color-slate-400); */
   /* --sidebar-text: #d5cdd3; */
   --sidebar-hover: #35262f;
-  --sidebar-active: #511d2b;
+  --sidebar-active: #1e293b;
 
   /* Shape */
   --radius-sm: 6px;
@@ -233,7 +235,7 @@ button {
 }
 
 .rentwise-nav .nav-link {
-  color: var(--sidebar-text);
+  color: #cbd5e1;
   position: relative;
   display: flex !important;
   align-items: center;
@@ -1983,4 +1985,22 @@ hr {
     color: var(--primary);
     font-size: 1rem;
   }
+}
+
+.parent--image{
+  position: relative;
+  border-radius: 20px;
+}
+
+.image-chip{
+  position: absolute;
+  height: auto;
+  top: 10;
+  right: 20;
+  border-radius: 40px;
+  min-width: 50px;
+  width: auto;
+  padding: 2px 10px;
+  background-color: #dff3e8;
+  color: #146c43;
 }

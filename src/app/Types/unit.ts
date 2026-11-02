@@ -3,12 +3,16 @@ export interface Unit {
   id: number;
   unitNumber: string;
   monthlyRent: number;
+  defaultDeposit?: number;
+  leases: any;
+  propertyId: number;
 }
 
 export interface UnitFormValues {
   unitNumber: string;
   monthlyRent: number;
   isOccupied: boolean;
+  defaultDeposit: number;
 
   tenant: {
     name: string;
@@ -23,6 +27,9 @@ export interface UnitFormValues {
     startDate: string;
     endDate?: string;
     monthlyRent: number;
+    depositAmount: number | "";
+    rentDueDay: number;
+    occupants: number;
   };
   tenantMode: TenantMode;
 }
@@ -33,6 +40,7 @@ export interface UnitViewData {
   monthlyRent: number;
   propertyId: number;
   isOccupied: boolean;
+  defaultDeposit: number;
 
   createdAt: string;
   updatedAt: string;

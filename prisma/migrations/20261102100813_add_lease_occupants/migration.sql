@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `lease` ADD COLUMN `occupants` INTEGER NOT NULL DEFAULT 1;

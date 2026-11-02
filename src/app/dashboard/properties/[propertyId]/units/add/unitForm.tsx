@@ -1,51 +1,18 @@
 "use client";
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  Card,
-  Label,
-  FormGroup,
-  Input,
-} from "reactstrap";
+import { Breadcrumb, BreadcrumbItem, Card, Label, FormGroup } from "reactstrap";
 import Link from "next/link";
 import { Form, Formik, Field } from "formik";
 import { createUnit } from "@/lib/actions/unitActions";
-import { UnitFormValues, OccupiedSwitchProps } from "@/app/Types/unit";
+import { UnitFormValues } from "@/app/Types/unit";
 import TenantForm from "@/app/dashboard/tenants/components/TenantForm";
 import SectionTitle from "@/app/shared-components/sectionTitle";
 import PlainInput from "@/app/shared-components/plainInput";
+import OccupiedSwitch from "@/app/shared-components/switch";
 
 interface AddUnitFormProps {
   propertyId: number;
   propertyName: string;
-}
-
-export function OccupiedSwitch({
-  id = "isOccupied",
-  checked,
-  onChange,
-  title = "This unit is occupied",
-  description = "Turn on to add the tenant and lease now. You can also do this later.",
-}: OccupiedSwitchProps) {
-  return (
-    <div className="occupied-switch">
-      <FormGroup switch className="m-0">
-        <Input
-          id={id}
-          type="switch"
-          role="switch"
-          checked={checked}
-          onChange={(e) => onChange(e.target.checked)}
-        />
-      </FormGroup>
-
-      <Label for={id} className="d-flex flex-col">
-        <strong>{title}</strong>
-        <span>{description}</span>
-      </Label>
-    </div>
-  );
 }
 
 export default function addUnitForm({
@@ -53,15 +20,23 @@ export default function addUnitForm({
   propertyName,
 }: AddUnitFormProps) {
   const emptyTenant = { name: "", email: "", phone: "" };
-  const emptyLease = { startDate: "", monthlyRent: 0, endDate: "" };
+  const emptyLease = {
+    startDate: "",
+    endDate: "",
+    monthlyRent: 0,
+    rentDueDay: 1,
+    occupants: 1,
+    depositAmount: 0,
+  };
   const initialValues: UnitFormValues = {
     unitNumber: "",
     monthlyRent: 0,
-    isOccupied: true,
+    isOccupied: false,
     tenant: emptyTenant,
-    tenantId: null,
+    tenantId: "",
     lease: emptyLease,
     tenantMode: "new",
+    defaultDeposit: 0
   };
   return (
     <div className="px-4">
@@ -130,13 +105,14 @@ export default function addUnitForm({
               </div>
 
               <OccupiedSwitch
+                id="isOccupied"
                 checked={values.isOccupied}
                 onChange={(checked) => {
                   setFieldValue("isOccupied", checked);
                   if (!checked) {
                     // clear stale tenant data when switched off
                     setFieldValue("tenantMode", "new");
-                    setFieldValue("tenantId", null);
+                    setFieldValue("tenantId", "");
                     setFieldValue("tenant", emptyTenant);
                     setFieldValue("lease", emptyLease);
                   }
@@ -147,14 +123,18 @@ export default function addUnitForm({
             <div>
               {/* TENANT FORM */}
               {values.isOccupied && (
-                <TenantForm className="px-4" context="unit" />
+                <TenantForm
+                  className="px-4"
+                  context="unit"
+                  propertyId={propertyId}
+                />
               )}
 
-              <div className="mt-5 flex justify-end gap-4 border-t border-t-gray-200 pt-3">
+              <div className="mt-5 flex justify-end gap-4">
                 <Link href={`/dashboard/properties/${propertyId}`}>
                   <button
                     type="button"
-                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                    className="px-4 py-2 border  text-gray-700 rounded-pill hover:bg-gray-50"
                   >
                     Cancel
                   </button>
@@ -162,7 +142,7 @@ export default function addUnitForm({
 
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  className="px-4 py-2 bg-primary rounded-pill text-white hover:bg-blue-700"
                 >
                   Save Unit
                 </button>
