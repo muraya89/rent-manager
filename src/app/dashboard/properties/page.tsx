@@ -18,10 +18,12 @@ export default async function PropertiesPage() {
           id: true,
           unitNumber: true,
           monthlyRent: true,
+          defaultDeposit: true,
           // Exclude date fields to avoid MariaDbAdapter issues
           leases: {
             where: { status: "ACTIVE" },
             select: {
+              id:true,
               tenant: { select: { name: true } },
               // Exclude date fields to avoid MariaDbAdapter issues
             },
@@ -37,6 +39,7 @@ export default async function PropertiesPage() {
     units: property.units.map((unit) => ({
       ...unit,
       monthlyRent: Number(unit.monthlyRent),
+      defaultDeposit: Number(unit.defaultDeposit),
       // Keep leases as-is since we only select tenant name (no Decimals)
       leases: unit.leases || [],
     })),

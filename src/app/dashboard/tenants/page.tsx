@@ -15,7 +15,7 @@ export default async function TenantsPage({
 }) {
   const tenants = await getTenants();
   const { success } = await searchParams;
-  const leasedTenants = await getLeasedTenant()
+  const leasedTenants = await getLeasedTenant();
   const newTenants = await NewTenant();
   const expiringTenants = await expiringSoonTenants();
   const unleasedTenants = await getNotLeasedTenant();

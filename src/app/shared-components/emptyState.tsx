@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 interface EmptyActionProps {
   title: string;
-  route: string;
+  route?: string;
   children?: React.ReactNode;
 }
 

@@ -26,7 +26,7 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
   };
-  const PlainInput = ({ field, form, ...props }) => {
+  const PlainInput = ({ field, form, ...props }:any) => {
     return (
       <input
         {...field}
@@ -42,7 +42,7 @@ export default function RegisterPage() {
     showPassword,
     setShowPassword,
     ...props
-  }) => {
+  }: any) => {
     return (
       <div className="relative">
         <input
@@ -55,7 +55,7 @@ export default function RegisterPage() {
 
         <button
           type="button"
-          onClick={() => setShowPassword((value) => !value)}
+          onClick={() => setShowPassword((value: boolean) => !value)}
           className="absolute inset-y-0 right-0 px-4 text-sm font-semibold transition hover:opacity-70"
           style={{ color: "var(--primary)" }}
           aria-label={showPassword ? "Hide password" : "Show password"}

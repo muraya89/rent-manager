@@ -141,13 +141,22 @@ model Lease {
     rentCharge   RentCharge    @relation(fields: [rentChargeId], references: [id])
   }
 
+enum Role {
+  ADMIN
+  MANAGER
+  LANDLORD
+  ACCOUNTANT
+  CARETAKER
+  TENANT
+}
+
   model User {
   id           String   @id @default(cuid())
   name         String?
   username     String?  @unique
   email        String?  @unique
   passwordHash String?
-  role         String   @default("USER")
+  role         Role @default(TENANT)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

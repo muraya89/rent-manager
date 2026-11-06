@@ -7,7 +7,7 @@ export default async function PaymentsPage() {
     select: {
       id: true,
       amount: true,
-      // Exclude paidAt date field to avoid MariaDbAdapter issues
+      paidAt: true,
       method: true,
       reference: true,
       rentCharge: {
@@ -22,7 +22,7 @@ export default async function PaymentsPage() {
   const paymentRows = payments.map((payment) => ({
     id: payment.id,
     amount: payment.amount.toString(),
-    // paidAt: payment.paidAt.toISOString(), // Exclude this for now
+    paidAt: payment.paidAt.toISOString(), // Exclude this for now
     method: payment.method,
     reference: payment.reference,
     period: payment.rentCharge.period,

@@ -12,10 +12,15 @@ import {
   BreadcrumbItem,
 } from "reactstrap";
 import Link from "next/link";
-import { Tenant } from "@/app/Types/index";
 import Alert from "@/app/shared-components/alert";
-import QuickAction from "@/app/shared-components/quick-action";
 import EmptyState from "@/app/shared-components/emptyState";
+import {
+  NewTenant,
+  TenantListItem,
+  leasedTenants,
+  expiringTenants,
+  unleasedTenants,
+} from "@/app/Types/tenant";
 
 export default function TenantsSectionPage({
   title,
@@ -27,14 +32,14 @@ export default function TenantsSectionPage({
   expiringTenants,
   unleasedTenants,
 }: {
-  tenants: Tenant[];
+  tenants: TenantListItem[];
   title: string;
   description: string;
-  alert: string;
-  leasedTenants: number;
-  newTenants: number;
-  expiringTenants: number;
-  unleasedTenants: number;
+  alert?: string;
+  leasedTenants: leasedTenants;
+  newTenants: NewTenant;
+  expiringTenants: expiringTenants;
+  unleasedTenants: unleasedTenants;
 }) {
   return (
     <div className="px-4">
@@ -71,7 +76,7 @@ export default function TenantsSectionPage({
             </div>
             <div>
               <p className="text-muted text-sm">Without Lease</p>
-              <p className="text-2xl font-semibold">{unleasedTenants.length}</p>
+              <p className="text-2xl font-semibold">{unleasedTenants}</p>
             </div>
           </div>
         </CardBody>

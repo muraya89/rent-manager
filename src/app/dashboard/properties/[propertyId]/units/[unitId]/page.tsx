@@ -3,6 +3,7 @@ import { getNotLeasedTenant } from "@/lib/queries/tenantQueries";
 import Link from "next/link";
 import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 import UnitView from "../components/unitView";
+import { notFound } from "next/navigation";
 interface UnitDetailsPageProps {
   params: Promise<{
     propertyId: string;
@@ -20,6 +21,7 @@ export default async function UnitDetailsPage({
 
   // fetch unit...
   const unitDetails = await viewUnit(unitIdNumber);
+  if (!unitDetails) notFound();
   const tenants = await getNotLeasedTenant();
 
   return (

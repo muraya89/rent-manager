@@ -32,7 +32,7 @@ interface TenantOption {
 }
 
 interface UnitViewProps {
-  unit: UnitViewData | null;
+  unit: UnitViewData;
   tenants: TenantOption[];
 }
 

@@ -7,7 +7,7 @@ export type TenantActivity = {
   amount: string;
   status: string;
   initials: string;
-  color: string;
+  color?: string;
 };
 
 export type DashboardStat = {

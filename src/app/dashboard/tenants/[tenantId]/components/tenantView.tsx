@@ -2,47 +2,7 @@
 
 import { Badge, Button, Card, CardBody, Col, Row, Table } from "reactstrap";
 import { useRouter } from "next/navigation";
-
-interface TenantViewData {
-  id: number;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  createdAt?: string;
-
-  leases: Array<{
-    id: number;
-    startDate: string;
-    endDate: string | null;
-    monthlyRent: number | string;
-    status: string;
-
-    unit: {
-      id: number;
-      unitNumber: string;
-
-      property: {
-        id: number;
-        name: string;
-        address: string;
-      };
-    };
-
-    rentCharges?: Array<{
-      id: number;
-      amount: number | string;
-      dueDate: string;
-      status: string;
-
-      payments?: Array<{
-        id: number;
-        amount: number | string;
-        date: string;
-        method: string;
-      }>;
-    }>;
-  }>;
-}
+import { TenantViewData } from "@/app/Types/tenant";
 
 interface TenantViewProps {
   tenant: TenantViewData;

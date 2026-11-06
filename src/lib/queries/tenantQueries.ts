@@ -15,10 +15,7 @@ export async function getTenants() {
   } catch (error) {
     console.error("Failed to end lease:", error);
 
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : "Failed to end lease.",
-    };
+    return [];
   }
 }
 
@@ -35,13 +32,13 @@ export async function getLeasedTenant() {
     });
     return activeTenants;
   } catch (error) {
-     console.error("Failed to fetch tenants:", error);
+    console.error("Failed to fetch tenants:", error);
 
-     return {
-       success: false,
-       message:
-         error instanceof Error ? error.message : "Failed to fetch tenants.",
-     };
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Failed to fetch tenants.",
+    };
   }
 }
 
@@ -60,13 +57,13 @@ export async function NewTenant() {
     });
     return newTenants;
   } catch (error) {
-     console.error("Failed to fetch tenants:", error);
+    console.error("Failed to fetch tenants:", error);
 
-     return {
-       success: false,
-       message:
-         error instanceof Error ? error.message : "Failed to fetch tenants.",
-     };
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Failed to fetch tenants.",
+    };
   }
 }
 
@@ -89,18 +86,18 @@ export async function expiringSoonTenants() {
     });
     return leasesExpiringSoon;
   } catch (error) {
-     console.error("Failed to end lease:", error);
+    console.error("Failed to end lease:", error);
 
-     return {
-       success: false,
-       message: error instanceof Error ? error.message : "Failed to end lease.",
-     };
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to end lease.",
+    };
   }
 }
 
 export async function getNotLeasedTenant() {
   try {
-    const tenants = await prisma.tenant.findMany({
+    return await prisma.tenant.findMany({
       where: {
         leases: {
           none: {
@@ -115,14 +112,9 @@ export async function getNotLeasedTenant() {
         phone: true,
       },
     });
-    return tenants;
   } catch (error) {
-     console.error("Failed to end lease:", error);
-
-     return {
-       success: false,
-       message: error instanceof Error ? error.message : "Failed to end lease.",
-     };
+    console.error("Failed to fetch tenants without an active lease:", error);
+    return [];
   }
 }
 
@@ -188,5 +180,30 @@ export async function getTenant(tenantId: string) {
       },
     },
   });
-  return tenant;
+  
+  if (!tenant) return null;
+
+  return {
+    ...tenant,
+    createdAt: tenant.createdAt.toISOString(),
+
+    leases: tenant.leases.map((lease) => ({
+      ...lease,
+      monthlyRent: Number(lease.monthlyRent),
+      startDate: lease.startDate.toISOString(),
+      endDate: lease.endDate?.toISOString() ?? null,
+
+      rentCharges: lease.rentCharges.map((charge) => ({
+        ...charge,
+        amount: Number(charge.amount),
+        dueDate: charge.dueDate.toISOString(),
+
+        payments: charge.payments.map((payment) => ({
+          ...payment,
+          amount: Number(payment.amount),
+          paidAt: payment.paidAt.toISOString(),
+        })),
+      })),
+    })),
+  };
 }

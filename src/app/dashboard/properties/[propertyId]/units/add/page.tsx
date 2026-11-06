@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default async function AddUnitPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ propertyId: string }>;
   searchParams: Promise<{ success?: string }>;
 }) {
   const { propertyId } = await params;

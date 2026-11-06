@@ -6,8 +6,8 @@ const fulfillmentPercentage = ({
   total,
   amount,
 }: {
-  total?: number;
-  amount?: number;
+  total: number;
+  amount: number;
 }) => {
   return total > 0 ? Math.min(100, Math.round((amount / total) * 100)) : 0;
 };
@@ -16,8 +16,8 @@ const FulfillmentStat = ({
   total,
   amount,
 }: {
-  total?: number;
-  amount?: number;
+  total: number;
+  amount: number;
 }) => (
   <>
     <div className="progress">
@@ -59,7 +59,7 @@ export function StatsGrid({ stats }: { stats: DashboardStat[] }) {
 
               {stat.progress ? (
                 <div>
-                  <FulfillmentStat amount={stat.amount} total={stat.total} />
+                  <FulfillmentStat amount={stat.amount || 0} total={stat.total || 0} />
                 </div>
               ) : (
                 <p className="mt-2 text-xs text-secondary">{stat.detail}</p>

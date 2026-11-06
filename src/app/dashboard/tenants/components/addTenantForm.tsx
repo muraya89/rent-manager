@@ -8,9 +8,23 @@ import TenantForm from "./TenantForm";
 
 export default function addTenantForm() {
   const initialValues: TenantFormValues = {
-    name: "",
-    email: "",
-    phone: "",
+    tenant: {
+      name: "",
+      email: "",
+      phone: "",
+    },
+    tenantId: 0,
+    unitId: 0,
+    propertyId: 0,
+    lease: {
+      startDate: "",
+      endDate: "",
+      monthlyRent: 0,
+      depositAmount: 0,
+      rentDueDay: 1,
+      occupants: 1,
+    },
+    isOccupied: false,
     tenantMode: "new",
   };
 

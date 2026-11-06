@@ -5,7 +5,7 @@ import TenantView from "./components/tenantView";
 
 interface TenantPageProps {
   params: Promise<{
-    id: string;
+    tenantId: string;
   }>;
 }
 

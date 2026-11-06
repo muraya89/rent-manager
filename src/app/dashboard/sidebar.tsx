@@ -16,7 +16,7 @@ import LogoutButton from "@/app/auth/components/logoutButton";
 import { useSession } from "next-auth/react";
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const user = session?.user;
   const pathname = usePathname();
   const getInitials = (name?: string | null): string => {

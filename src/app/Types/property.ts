@@ -1,22 +1,6 @@
-export interface Property {
-  id: number;
-  name: string;
-  address: string;
-  coverImageUrl: string;
-  monthlyRent: number;
-  units: Array<{
-    id: number;
-    unitNumber: string;
-    monthlyRent: number;
-    defaultDeposit: number;
-    leases: Array<{
-      id: number;
-      tenant: {
-        name: string;
-      };
-    }>;
-  }>;
-}
+import { getProperties } from "@/lib/queries/propertyQueries";
+
+export type Property = Awaited<ReturnType<typeof getProperties>>[number];
 
 export interface PropertyFormValues {
   name: string;

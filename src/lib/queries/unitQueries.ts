@@ -46,30 +46,28 @@ export async function viewUnit(unitID: number) {
       leases: {
         include: {
           tenant: true,
-          rentCharges: {
-            include: {
-              payments: true,
-            },
-          },
+          rentCharges: { include: { payments: true } },
         },
-        orderBy: {
-          startDate: "desc",
-        },
+        orderBy: { startDate: "desc" },
       },
     },
   });
 
-  if (!unit) {
-    return null;
-  }
+  if (!unit) return null;
+
   return {
     ...unit,
     monthlyRent: Number(unit.monthlyRent),
+    defaultDeposit: Number(unit.defaultDeposit), // if it's a Decimal
     isOccupied: unit.leases.some((lease) => lease.status === "ACTIVE"),
+    createdAt: unit.createdAt.toISOString(),
+    updatedAt: unit.updatedAt.toISOString(),
 
     property: {
       ...unit.property,
       monthlyRent: Number(unit.property.monthlyRent),
+      createdAt: unit.property.createdAt.toISOString(),
+      updatedAt: unit.property.updatedAt.toISOString(),
     },
 
     leases: unit.leases.map((lease) => ({
@@ -77,6 +75,14 @@ export async function viewUnit(unitID: number) {
       monthlyRent: Number(lease.monthlyRent),
       startDate: lease.startDate.toISOString(),
       endDate: lease.endDate?.toISOString() ?? null,
+      createdAt: lease.createdAt.toISOString(),
+      updatedAt: lease.updatedAt.toISOString(),
+
+      tenant: {
+        ...lease.tenant,
+        createdAt: lease.tenant.createdAt.toISOString(),
+        updatedAt: lease.tenant.updatedAt.toISOString(),
+      },
 
       rentCharges: lease.rentCharges.map((charge) => ({
         ...charge,
